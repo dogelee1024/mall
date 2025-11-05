@@ -43,10 +43,6 @@ public interface OmsPortalOrderService {
     @Transactional
     void cancelOrder(Long orderId);
 
-    /**
-     * 发送延迟消息取消订单
-     */
-    void sendDelayMessageCancelOrder(Long orderId);
 
     /**
      * 确认收货
@@ -62,6 +58,8 @@ public interface OmsPortalOrderService {
      * 根据订单ID获取订单详情
      */
     OmsOrderDetail detail(Long orderId);
+
+    OmsOrderDetail detail(String orderSn);
 
     /**
      * 用户根据订单ID删除订单
