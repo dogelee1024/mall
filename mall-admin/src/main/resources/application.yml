@@ -2,7 +2,7 @@ spring:
   application:
     name: mall-admin
   profiles:
-    active: dev #默认为开发环境
+    active: ${server.mode} #默认为开发环境
   servlet:
     multipart:
       enabled: true #开启文件上传
@@ -48,7 +48,7 @@ secure:
       - /admin/register
       - /admin/info
       - /admin/logout
-      - /minio/upload
+      - /image/minio/upload
 
 aliyun:
   oss:

@@ -20,8 +20,8 @@ spring:
     timeout: 300ms # 连接超时时间（毫秒）
 
 minio:
-  endpoint: http://192.169.110.114:9001 #MinIO服务所在地址
-  bucketName: mall #存储桶名称
+  endpoint: http://192.168.110.114:9000 #MinIO服务所在地址
+  bucket: mall #存储桶名称
   accessKey: admin #访问的key
   secretKey: admin123 #访问的秘钥
 

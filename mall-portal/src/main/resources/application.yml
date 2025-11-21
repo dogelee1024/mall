@@ -2,7 +2,7 @@ spring:
   application:
     name: mall-portal
   profiles:
-    active: dev #默认为开发环境
+    active: ${server.mode} #默认为开发环境
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
@@ -52,6 +52,7 @@ redis:
 mongo:
   insert:
     sqlEnable: true # 用于控制是否通过数据库数据来插入mongo
+
 
 # 消息队列定义
 rabbitmq:
