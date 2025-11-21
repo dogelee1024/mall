@@ -75,15 +75,14 @@ public class UmsMemberServiceImpl implements UmsMemberService {
     }
 
     @Override
-    public void register(String username, String password, String telephone, String authCode) {
+    public void register(String username, String password, String email, String authCode) {
         //验证验证码
-        if(!verifyAuthCode(authCode,telephone)){
+        if(!verifyAuthCode(authCode,email)){
             Asserts.fail("验证码错误");
         }
         //查询是否已有该用户
         UmsMemberExample example = new UmsMemberExample();
         example.createCriteria().andUsernameEqualTo(username);
-        example.or(example.createCriteria().andPhoneEqualTo(telephone));
         List<UmsMember> umsMembers = memberMapper.selectByExample(example);
         if (!CollectionUtils.isEmpty(umsMembers)) {
             Asserts.fail("该用户已经存在");
@@ -91,7 +90,6 @@ public class UmsMemberServiceImpl implements UmsMemberService {
         //没有该用户进行添加操作
         UmsMember umsMember = new UmsMember();
         umsMember.setUsername(username);
-        umsMember.setPhone(telephone);
         umsMember.setPassword(passwordEncoder.encode(password));
         umsMember.setCreateTime(new Date());
         umsMember.setStatus(1);
@@ -118,15 +116,15 @@ public class UmsMemberServiceImpl implements UmsMemberService {
     }
 
     @Override
-    public void updatePassword(String telephone, String password, String authCode) {
+    public void updatePassword(String username, String password, String authCode) {
         UmsMemberExample example = new UmsMemberExample();
-        example.createCriteria().andPhoneEqualTo(telephone);
+        example.createCriteria().andUsernameEqualTo(username);
         List<UmsMember> memberList = memberMapper.selectByExample(example);
         if(CollectionUtils.isEmpty(memberList)){
             Asserts.fail("该账号不存在");
         }
         //验证验证码
-        if(!verifyAuthCode(authCode,telephone)){
+        if(!verifyAuthCode(authCode,username)){
             Asserts.fail("验证码错误");
         }
         UmsMember umsMember = memberList.get(0);
@@ -185,11 +183,11 @@ public class UmsMemberServiceImpl implements UmsMemberService {
     }
 
     //对输入的验证码进行校验
-    private boolean verifyAuthCode(String authCode, String telephone){
+    private boolean verifyAuthCode(String authCode, String email){
         if(StrUtil.isEmpty(authCode)){
             return false;
         }
-        String realAuthCode = memberCacheService.getAuthCode(telephone);
+        String realAuthCode = memberCacheService.getAuthCode(email);
         return authCode.equals(realAuthCode);
     }
 

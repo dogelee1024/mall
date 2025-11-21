@@ -3,9 +3,9 @@ server:
 
 spring:
   datasource:
-    url: jdbc:mysql://192.168.110.114:8506/mall?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai&useSSL=false
-    username: root
-    password: rootpassword
+    url: jdbc:mysql://54.153.110.248:13306/mall?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai&useSSL=false
+    username: fengshui
+    password: fegnshuipassword
     druid:
       initial-size: 5 #连接池初始化大小
       min-idle: 10 #最小空闲连接数
@@ -16,11 +16,24 @@ spring:
         login-username: druid
         login-password: druid
   redis:
-    host: 192.168.110.114 # Redis服务器地址
+    host: 54.153.110.248 # Redis服务器地址
     database: 0 # Redis数据库索引（默认为0）
-    port: 6379 # Redis服务器连接端口
-    password: wanqiu # Redis服务器连接密码（默认为空）
-    timeout: 300ms # 连接超时时间（毫秒）
+    port: 16379 # Redis服务器连接端口
+    password: fengshui # Redis服务器连接密码（默认为空）
+    timeout: 3000ms # 连接超时时间（毫秒）
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: jlucas3991@gmail.com
+    password: weuorbdbdpyzryae   # 注意不是邮箱密码
+    protocol: smtp
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
 
 logging:
   level:
@@ -44,4 +57,6 @@ paypal:
     id: AaTzO96lo7fBR_sJncQElIkc6Et4ieFJvD9Q1hpt49JnQxEkoVFj7jslqR8rPmji5j-lLJeACgl_Y4Oq
     secret: EG_5lqXVj2p7tQBkJeEhF7SlMiin9xa1bQpy-ahf5tNRpTt7mmIHEOTYh4CE6Y6RQ0Ao-VkpQhOi0EWg
   mode: sandbox  # 或 live
+
+
 

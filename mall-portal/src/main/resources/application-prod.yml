@@ -17,11 +17,25 @@ spring:
         login-password: druid
 
   redis:
-    host: redis # Redis服务器地址
+    host: 127.0.0.1 # Redis服务器地址
     database: 0 # Redis数据库索引（默认为0）
     port: 16379 # Redis服务器连接端口
     password: fengshui # Redis服务器连接密码（默认为空）
     timeout: 300ms # 连接超时时间（毫秒）
+
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: jlucas3991@gmail.com
+    password: weuorbdbdpyzryae   # 注意不是邮箱密码
+    protocol: smtp
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
 
 
 logging:

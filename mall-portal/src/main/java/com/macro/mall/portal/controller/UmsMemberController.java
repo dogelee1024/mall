@@ -40,9 +40,8 @@ public class UmsMemberController {
     @ResponseBody
     public CommonResult register(@RequestParam String username,
                                  @RequestParam String password,
-                                 @RequestParam String telephone,
                                  @RequestParam String authCode) {
-        memberService.register(username, password, telephone, authCode);
+        memberService.register(username, password, username, authCode);
         return CommonResult.success(null,"注册成功");
     }
 
@@ -72,21 +71,21 @@ public class UmsMemberController {
         return CommonResult.success(member);
     }
 
-    @ApiOperation("获取验证码")
+    /*@ApiOperation("获取验证码")
     @RequestMapping(value = "/getAuthCode", method = RequestMethod.GET)
     @ResponseBody
     public CommonResult getAuthCode(@RequestParam String telephone) {
         String authCode = memberService.generateAuthCode(telephone);
         return CommonResult.success(authCode,"获取验证码成功");
-    }
+    }*/
 
     @ApiOperation("会员修改密码")
     @RequestMapping(value = "/updatePassword", method = RequestMethod.POST)
     @ResponseBody
-    public CommonResult updatePassword(@RequestParam String telephone,
+    public CommonResult updatePassword(@RequestParam String username,
                                  @RequestParam String password,
                                  @RequestParam String authCode) {
-        memberService.updatePassword(telephone,password,authCode);
+        memberService.updatePassword(username,password,authCode);
         return CommonResult.success(null,"密码修改成功");
     }
 
