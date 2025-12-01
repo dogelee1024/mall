@@ -58,6 +58,11 @@ public interface UmsMemberService {
     String login(String username, String password);
 
     /**
+     * 登录后获取token
+     */
+    String loginWithCode(String username, String password);
+
+    /**
      * 刷新token
      */
     String refreshToken(String token);

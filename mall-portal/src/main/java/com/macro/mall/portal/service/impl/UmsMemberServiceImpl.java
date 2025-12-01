@@ -155,8 +155,24 @@ public class UmsMemberServiceImpl implements UmsMemberService {
         UmsMember member = getByUsername(username);
         if(member!=null){
             return new MemberDetails(member);
+        }else{
+            //没有该用户进行添加操作
+            UmsMember umsMember = new UmsMember();
+            umsMember.setUsername(username);
+            umsMember.setPassword(passwordEncoder.encode(username+"password"));
+            umsMember.setCreateTime(new Date());
+            umsMember.setStatus(1);
+            //获取默认会员等级并设置
+            UmsMemberLevelExample levelExample = new UmsMemberLevelExample();
+            levelExample.createCriteria().andDefaultStatusEqualTo(1);
+            List<UmsMemberLevel> memberLevelList = memberLevelMapper.selectByExample(levelExample);
+            if (!CollectionUtils.isEmpty(memberLevelList)) {
+                umsMember.setMemberLevelId(memberLevelList.get(0).getId());
+            }
+            memberMapper.insert(umsMember);
+            return new MemberDetails(umsMember);
         }
-        throw new UsernameNotFoundException("用户名或密码错误");
+        //throw new UsernameNotFoundException("用户名或密码错误");
     }
 
     @Override
@@ -168,6 +184,30 @@ public class UmsMemberServiceImpl implements UmsMemberService {
             if(!passwordEncoder.matches(password,userDetails.getPassword())){
                 throw new BadCredentialsException("密码不正确");
             }
+            UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            token = jwtTokenUtil.generateToken(userDetails);
+        } catch (AuthenticationException e) {
+            LOGGER.warn("登录异常:{}", e.getMessage());
+        }
+        return token;
+    }
+
+    @Override
+    public String loginWithCode(String username, String code) {
+        String token = null;
+        //验证码注册的用户默认密码是username+'password'
+        try {
+
+            //验证验证码
+            if(!verifyAuthCode(code,username)){
+                Asserts.fail("验证码错误");
+            }
+
+            UserDetails userDetails = loadUserByUsername(username);
+           /* if(!passwordEncoder.matches(password,userDetails.getPassword())){
+                throw new BadCredentialsException("密码不正确");
+            }*/
             UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(authentication);
             token = jwtTokenUtil.generateToken(userDetails);

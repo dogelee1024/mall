@@ -22,10 +22,10 @@ spring:
     password: fengshui # Redis服务器连接密码（默认为空）
     timeout: 3000ms # 连接超时时间（毫秒）
   mail:
-    host: smtp.gmail.com
+    host: smtp.qq.com
     port: 587
-    username: jlucas3991@gmail.com
-    password: weuorbdbdpyzryae   # 注意不是邮箱密码
+    username: 707731655@qq.com
+    password: irzklwefablbbbgd   # 注意不是邮箱密码
     protocol: smtp
     properties:
       mail:

@@ -4,6 +4,7 @@ import com.github.pagehelper.PageHelper;
 import com.macro.mall.dto.UmsMenuNode;
 import com.macro.mall.mapper.UmsMenuMapper;
 import com.macro.mall.model.*;
+import com.macro.mall.model.UmsMenuExample.Criteria;
 import com.macro.mall.service.UmsMenuService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -75,7 +76,9 @@ public class UmsMenuServiceImpl implements UmsMenuService {
 
     @Override
     public List<UmsMenuNode> treeList() {
-        List<UmsMenu> menuList = menuMapper.selectByExample(new UmsMenuExample());
+        UmsMenuExample umsMenuExample = new UmsMenuExample();
+        umsMenuExample.createCriteria().andHiddenEqualTo(0);
+        List<UmsMenu> menuList = menuMapper.selectByExample(umsMenuExample);
         List<UmsMenuNode> result = menuList.stream()
                 .filter(menu -> menu.getParentId().equals(0L))
                 .map(menu -> covertMenuNode(menu, menuList))
