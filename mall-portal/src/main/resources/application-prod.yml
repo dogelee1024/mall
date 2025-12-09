@@ -3,7 +3,7 @@ server:
 
 spring:
   datasource:
-    url: jdbc:mysql://127.0.0.1:13306/mall?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai&useSSL=false
+    url: jdbc:mysql://127.0.0.1:13306/mall?useUnicode=true&characterEncoding=utf-8&serverTimezone=America/Los_Angeles&useSSL=false
     username: fengshui
     password: fegnshuipassword
     druid:
@@ -62,3 +62,9 @@ paypal:
     id: AaTzO96lo7fBR_sJncQElIkc6Et4ieFJvD9Q1hpt49JnQxEkoVFj7jslqR8rPmji5j-lLJeACgl_Y4Oq
     secret: EG_5lqXVj2p7tQBkJeEhF7SlMiin9xa1bQpy-ahf5tNRpTt7mmIHEOTYh4CE6Y6RQ0Ao-VkpQhOi0EWg
   mode: sandbox  # 或 live
+
+  easy:
+    post:
+      key: EZAK0581822825954399bd89f15c68be5633DZ2wZkm4431BimaSGoEaPQ
+
+

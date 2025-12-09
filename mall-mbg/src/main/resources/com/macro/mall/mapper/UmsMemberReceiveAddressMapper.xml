@@ -8,6 +8,7 @@
     <result column="phone_number" jdbcType="VARCHAR" property="phoneNumber" />
     <result column="default_status" jdbcType="INTEGER" property="defaultStatus" />
     <result column="post_code" jdbcType="VARCHAR" property="postCode" />
+    <result column="country" jdbcType="VARCHAR" property="country" />
     <result column="province" jdbcType="VARCHAR" property="province" />
     <result column="city" jdbcType="VARCHAR" property="city" />
     <result column="region" jdbcType="VARCHAR" property="region" />
@@ -72,8 +73,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, member_id, name, phone_number, default_status, post_code, province, city, region, 
-    detail_address
+    id, member_id, name, phone_number, default_status, post_code, country, province, 
+    city, region, detail_address
   </sql>
   <select id="selectByExample" parameterType="com.macro.mall.model.UmsMemberReceiveAddressExample" resultMap="BaseResultMap">
     select
@@ -110,13 +111,13 @@
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into ums_member_receive_address (member_id, name, phone_number, 
-      default_status, post_code, province, 
-      city, region, detail_address
-      )
+      default_status, post_code, country, 
+      province, city, region, 
+      detail_address)
     values (#{memberId,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{phoneNumber,jdbcType=VARCHAR}, 
-      #{defaultStatus,jdbcType=INTEGER}, #{postCode,jdbcType=VARCHAR}, #{province,jdbcType=VARCHAR}, 
-      #{city,jdbcType=VARCHAR}, #{region,jdbcType=VARCHAR}, #{detailAddress,jdbcType=VARCHAR}
-      )
+      #{defaultStatus,jdbcType=INTEGER}, #{postCode,jdbcType=VARCHAR}, #{country,jdbcType=VARCHAR}, 
+      #{province,jdbcType=VARCHAR}, #{city,jdbcType=VARCHAR}, #{region,jdbcType=VARCHAR}, 
+      #{detailAddress,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.macro.mall.model.UmsMemberReceiveAddress">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
@@ -138,6 +139,9 @@
       </if>
       <if test="postCode != null">
         post_code,
+      </if>
+      <if test="country != null">
+        country,
       </if>
       <if test="province != null">
         province,
@@ -168,6 +172,9 @@
       <if test="postCode != null">
         #{postCode,jdbcType=VARCHAR},
       </if>
+      <if test="country != null">
+        #{country,jdbcType=VARCHAR},
+      </if>
       <if test="province != null">
         #{province,jdbcType=VARCHAR},
       </if>
@@ -191,54 +198,58 @@
   <update id="updateByExampleSelective" parameterType="map">
     update ums_member_receive_address
     <set>
-      <if test="record.id != null">
-        id = #{record.id,jdbcType=BIGINT},
+      <if test="row.id != null">
+        id = #{row.id,jdbcType=BIGINT},
       </if>
-      <if test="record.memberId != null">
-        member_id = #{record.memberId,jdbcType=BIGINT},
+      <if test="row.memberId != null">
+        member_id = #{row.memberId,jdbcType=BIGINT},
       </if>
-      <if test="record.name != null">
-        name = #{record.name,jdbcType=VARCHAR},
+      <if test="row.name != null">
+        name = #{row.name,jdbcType=VARCHAR},
       </if>
-      <if test="record.phoneNumber != null">
-        phone_number = #{record.phoneNumber,jdbcType=VARCHAR},
+      <if test="row.phoneNumber != null">
+        phone_number = #{row.phoneNumber,jdbcType=VARCHAR},
       </if>
-      <if test="record.defaultStatus != null">
-        default_status = #{record.defaultStatus,jdbcType=INTEGER},
+      <if test="row.defaultStatus != null">
+        default_status = #{row.defaultStatus,jdbcType=INTEGER},
       </if>
-      <if test="record.postCode != null">
-        post_code = #{record.postCode,jdbcType=VARCHAR},
+      <if test="row.postCode != null">
+        post_code = #{row.postCode,jdbcType=VARCHAR},
       </if>
-      <if test="record.province != null">
-        province = #{record.province,jdbcType=VARCHAR},
+      <if test="row.country != null">
+        country = #{row.country,jdbcType=VARCHAR},
       </if>
-      <if test="record.city != null">
-        city = #{record.city,jdbcType=VARCHAR},
+      <if test="row.province != null">
+        province = #{row.province,jdbcType=VARCHAR},
       </if>
-      <if test="record.region != null">
-        region = #{record.region,jdbcType=VARCHAR},
+      <if test="row.city != null">
+        city = #{row.city,jdbcType=VARCHAR},
       </if>
-      <if test="record.detailAddress != null">
-        detail_address = #{record.detailAddress,jdbcType=VARCHAR},
+      <if test="row.region != null">
+        region = #{row.region,jdbcType=VARCHAR},
+      </if>
+      <if test="row.detailAddress != null">
+        detail_address = #{row.detailAddress,jdbcType=VARCHAR},
       </if>
     </set>
-    <if test="_parameter != null">
+    <if test="example != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
     update ums_member_receive_address
-    set id = #{record.id,jdbcType=BIGINT},
-      member_id = #{record.memberId,jdbcType=BIGINT},
-      name = #{record.name,jdbcType=VARCHAR},
-      phone_number = #{record.phoneNumber,jdbcType=VARCHAR},
-      default_status = #{record.defaultStatus,jdbcType=INTEGER},
-      post_code = #{record.postCode,jdbcType=VARCHAR},
-      province = #{record.province,jdbcType=VARCHAR},
-      city = #{record.city,jdbcType=VARCHAR},
-      region = #{record.region,jdbcType=VARCHAR},
-      detail_address = #{record.detailAddress,jdbcType=VARCHAR}
-    <if test="_parameter != null">
+    set id = #{row.id,jdbcType=BIGINT},
+      member_id = #{row.memberId,jdbcType=BIGINT},
+      name = #{row.name,jdbcType=VARCHAR},
+      phone_number = #{row.phoneNumber,jdbcType=VARCHAR},
+      default_status = #{row.defaultStatus,jdbcType=INTEGER},
+      post_code = #{row.postCode,jdbcType=VARCHAR},
+      country = #{row.country,jdbcType=VARCHAR},
+      province = #{row.province,jdbcType=VARCHAR},
+      city = #{row.city,jdbcType=VARCHAR},
+      region = #{row.region,jdbcType=VARCHAR},
+      detail_address = #{row.detailAddress,jdbcType=VARCHAR}
+    <if test="example != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
@@ -259,6 +270,9 @@
       </if>
       <if test="postCode != null">
         post_code = #{postCode,jdbcType=VARCHAR},
+      </if>
+      <if test="country != null">
+        country = #{country,jdbcType=VARCHAR},
       </if>
       <if test="province != null">
         province = #{province,jdbcType=VARCHAR},
@@ -282,6 +296,7 @@
       phone_number = #{phoneNumber,jdbcType=VARCHAR},
       default_status = #{defaultStatus,jdbcType=INTEGER},
       post_code = #{postCode,jdbcType=VARCHAR},
+      country = #{country,jdbcType=VARCHAR},
       province = #{province,jdbcType=VARCHAR},
       city = #{city,jdbcType=VARCHAR},
       region = #{region,jdbcType=VARCHAR},

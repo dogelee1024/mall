@@ -19,6 +19,9 @@ public class UmsMemberReceiveAddress implements Serializable {
     @ApiModelProperty(value = "邮政编码")
     private String postCode;
 
+    @ApiModelProperty(value = "国家")
+    private String country;
+
     @ApiModelProperty(value = "省份/直辖市")
     private String province;
 
@@ -81,6 +84,14 @@ public class UmsMemberReceiveAddress implements Serializable {
         this.postCode = postCode;
     }
 
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
     public String getProvince() {
         return province;
     }
@@ -125,6 +136,7 @@ public class UmsMemberReceiveAddress implements Serializable {
         sb.append(", phoneNumber=").append(phoneNumber);
         sb.append(", defaultStatus=").append(defaultStatus);
         sb.append(", postCode=").append(postCode);
+        sb.append(", country=").append(country);
         sb.append(", province=").append(province);
         sb.append(", city=").append(city);
         sb.append(", region=").append(region);

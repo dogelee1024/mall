@@ -38,6 +38,8 @@ secure:
       - /brand/**
       - /alipay/**
       - /auth/**
+      - /post/**
+
 
 # 自定义redis key
 redis:

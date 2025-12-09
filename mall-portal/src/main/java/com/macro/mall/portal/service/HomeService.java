@@ -5,6 +5,7 @@ import com.macro.mall.model.PmsProduct;
 import com.macro.mall.model.PmsProductCategory;
 import com.macro.mall.portal.domain.HomeContentResult;
 
+import com.macro.mall.portal.model.CategoryProductBO;
 import java.util.List;
 
 /**
@@ -21,13 +22,21 @@ public interface HomeService {
     /**
      * 首页商品推荐
      */
-    List<PmsProduct> recommendProductList(Integer pageSize, Integer pageNum);
+
+    List<PmsProduct> recommendProductList(Long categoryId, Integer pageSize, Integer pageNum);
+
 
     /**
      * 获取商品分类
      * @param parentId 0:获取一级分类；其他：获取指定二级分类
      */
     List<PmsProductCategory> getProductCateList(Long parentId);
+
+    /**
+     * 获取商品分类
+     * @param categoryId 0:获取一级分类；其他：获取指定二级分类
+     */
+    PmsProductCategory getProductCate(Long categoryId);
 
     /**
      * 根据专题分类id分页获取专题

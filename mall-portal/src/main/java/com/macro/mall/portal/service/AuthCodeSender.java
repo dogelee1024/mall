@@ -20,7 +20,7 @@ public class AuthCodeSender {
 		//verifyCodeService.saveCode(email, code);
 		umsMemberCacheService.setAuthCode(email, code);
 
-		String content = "您的注册验证码为：" + code + "，有效期5分钟。";
+		String content = "Your registration verification code is :" + code + ", valid for 5 minutes.";
 
 		mailService.sendSimpleMail(email, "注册验证码", content);
 	}
@@ -30,7 +30,7 @@ public class AuthCodeSender {
 		//verifyCodeService.saveCode(email, code);
 		umsMemberCacheService.setAuthCode(email, code);
 
-		String content = "您的登录验证码为：" + code + "，有效期5分钟。";
+		String content = "Your login verification code is :" + code + ", valid for 5 minutes.";
 
 		mailService.sendSimpleMail(email, "登录验证码", content);
 	}

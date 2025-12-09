@@ -2,6 +2,7 @@ package com.macro.mall.portal.controller;
 
 import com.macro.mall.common.api.CommonResult;
 import com.macro.mall.model.UmsMember;
+import com.macro.mall.portal.model.ReqeustLoginBO;
 import com.macro.mall.portal.service.UmsMemberService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -9,6 +10,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -48,9 +50,8 @@ public class UmsMemberController {
     @ApiOperation("会员登录")
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     @ResponseBody
-    public CommonResult login(@RequestParam String username,
-                              @RequestParam String password) {
-        String token = memberService.login(username, password);
+    public CommonResult login(@RequestBody ReqeustLoginBO request) {
+        String token = memberService.login(request.getUsername(), request.getPassword());
         if (token == null) {
             return CommonResult.validateFailed("用户名或密码错误");
         }
@@ -63,9 +64,8 @@ public class UmsMemberController {
     @ApiOperation("会员验证码登录")
     @RequestMapping(value = "/loginWithCode", method = RequestMethod.POST)
     @ResponseBody
-    public CommonResult loginWithCode(@RequestParam String username,
-        @RequestParam String code) {
-        String token = memberService.loginWithCode(username, code);
+    public CommonResult loginWithCode(@RequestBody ReqeustLoginBO request) {
+        String token = memberService.loginWithCode(request.getUsername(), request.getCode());
         if (token == null) {
             return CommonResult.validateFailed("用户名或验证码错误");
         }

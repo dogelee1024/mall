@@ -5,10 +5,14 @@ import com.macro.mall.model.CmsSubject;
 import com.macro.mall.model.PmsProduct;
 import com.macro.mall.model.PmsProductCategory;
 import com.macro.mall.portal.domain.HomeContentResult;
+import com.macro.mall.portal.model.CategoryProductBO;
+import com.macro.mall.portal.model.CategoryProductListBO;
 import com.macro.mall.portal.service.HomeService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import java.util.stream.Collectors;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -39,17 +43,34 @@ public class HomeController {
     @RequestMapping(value = "/recommendProductList", method = RequestMethod.GET)
     @ResponseBody
     public CommonResult<List<PmsProduct>> recommendProductList(@RequestParam(value = "pageSize", defaultValue = "4") Integer pageSize,
-                                                               @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum) {
-        List<PmsProduct> productList = homeService.recommendProductList(pageSize, pageNum);
+                                                               @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
+        @RequestParam(value = "categoryId", required = false) Long categoryId) {
+        List<PmsProduct> productList = homeService.recommendProductList(categoryId, pageSize, pageNum);
         return CommonResult.success(productList);
     }
 
     @ApiOperation("获取首页商品分类")
     @RequestMapping(value = "/productCateList/{parentId}", method = RequestMethod.GET)
     @ResponseBody
-    public CommonResult<List<PmsProductCategory>> getProductCateList(@PathVariable Long parentId) {
+    public CommonResult<CategoryProductBO> getProductCateList(@PathVariable Long parentId) {
+
+        PmsProductCategory productCate = homeService.getProductCate(parentId);
+        CategoryProductBO result = new CategoryProductBO();
+        BeanUtils.copyProperties(productCate, result);
+        List<PmsProduct> pmsProducts1 = homeService.recommendProductList(parentId, 50, 1);
+        result.setProductList(pmsProducts1);
+
         List<PmsProductCategory> productCategoryList = homeService.getProductCateList(parentId);
-        return CommonResult.success(productCategoryList);
+        List<CategoryProductListBO> subList = productCategoryList.stream().map(productCategory -> {
+            CategoryProductListBO categoryProductListBO = new CategoryProductListBO();
+            BeanUtils.copyProperties(productCategory, categoryProductListBO);
+            Long id = categoryProductListBO.getId();
+            List<PmsProduct> pmsProducts = homeService.recommendProductList(id, 50, 1);
+            categoryProductListBO.setProductList(pmsProducts);
+            return categoryProductListBO;
+        }).collect(Collectors.toList());
+        result.setSubCategoryList(subList);
+        return CommonResult.success(result);
     }
 
     @ApiOperation("根据分类分页获取专题")

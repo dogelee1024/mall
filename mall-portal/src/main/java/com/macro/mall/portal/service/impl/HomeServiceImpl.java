@@ -7,6 +7,7 @@ import com.macro.mall.portal.dao.HomeDao;
 import com.macro.mall.portal.domain.FlashPromotionProduct;
 import com.macro.mall.portal.domain.HomeContentResult;
 import com.macro.mall.portal.domain.HomeFlashPromotion;
+import com.macro.mall.portal.model.CategoryProductBO;
 import com.macro.mall.portal.service.HomeService;
 import com.macro.mall.portal.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,13 +57,18 @@ public class HomeServiceImpl implements HomeService {
     }
 
     @Override
-    public List<PmsProduct> recommendProductList(Integer pageSize, Integer pageNum) {
+    public List<PmsProduct> recommendProductList(Long categoryId, Integer pageSize, Integer pageNum) {
         // TODO: 2019/1/29 暂时默认推荐所有商品
         PageHelper.startPage(pageNum,pageSize);
         PmsProductExample example = new PmsProductExample();
-        example.createCriteria()
-                .andDeleteStatusEqualTo(0)
-                .andPublishStatusEqualTo(1);
+        PmsProductExample.Criteria criteria = example.createCriteria();
+        criteria.andDeleteStatusEqualTo(0)
+            .andPublishStatusEqualTo(1);
+
+        if (categoryId != null) {
+            criteria.andProductCategoryIdEqualTo(categoryId);
+        }
+
         return productMapper.selectByExample(example);
     }
 
@@ -74,6 +80,20 @@ public class HomeServiceImpl implements HomeService {
                 .andParentIdEqualTo(parentId);
         example.setOrderByClause("sort desc");
         return productCategoryMapper.selectByExample(example);
+    }
+
+    /**
+     * 获取商品分类
+     *
+     * @param categoryId 0:获取一级分类；其他：获取指定二级分类
+     */
+    @Override
+    public PmsProductCategory getProductCate(Long categoryId) {
+      /*  PmsProductCategoryExample example = new PmsProductCategoryExample();
+        example.createCriteria()
+            .andShowStatusEqualTo(1)
+            .andIdEqualTo(categoryId);*/
+        return productCategoryMapper.selectByPrimaryKey(categoryId);
     }
 
     @Override
