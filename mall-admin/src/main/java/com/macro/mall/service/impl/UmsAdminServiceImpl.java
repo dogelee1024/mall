@@ -26,6 +26,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -56,6 +57,12 @@ public class UmsAdminServiceImpl implements UmsAdminService {
     private UmsAdminRoleRelationDao adminRoleRelationDao;
     @Autowired
     private UmsAdminLoginLogMapper loginLogMapper;
+
+    public static void main(String[] args) {
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        String admin123456 = passwordEncoder.encode("admin123456");
+        System.out.println(admin123456);
+    }
 
     @Override
     public UmsAdmin getAdminByUsername(String username) {
@@ -101,9 +108,9 @@ public class UmsAdminServiceImpl implements UmsAdminService {
         //密码需要客户端加密后传递
         try {
             UserDetails userDetails = loadUserByUsername(username);
-           /* if(!passwordEncoder.matches(password,userDetails.getPassword())){
+            if(!passwordEncoder.matches(password,userDetails.getPassword())){
                 Asserts.fail("密码不正确");
-            }*/
+            }
             if(!userDetails.isEnabled()){
                 Asserts.fail("帐号已被禁用");
             }
@@ -161,9 +168,13 @@ public class UmsAdminServiceImpl implements UmsAdminService {
         UmsAdminExample example = new UmsAdminExample();
         UmsAdminExample.Criteria criteria = example.createCriteria();
         if (!StrUtil.isEmpty(keyword)) {
+            criteria.andIdNotEqualTo(3L);
             criteria.andUsernameLike("%" + keyword + "%");
             example.or(example.createCriteria().andNickNameLike("%" + keyword + "%"));
+        }else{
+            criteria.andIdNotEqualTo(3L);
         }
+
         return adminMapper.selectByExample(example);
     }
 

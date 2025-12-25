@@ -1,10 +1,12 @@
 package com.macro.mall.model;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class OmsOrder implements Serializable {
     @ApiModelProperty(value = "订单id")
     private Long id;
@@ -82,20 +84,53 @@ public class OmsOrder implements Serializable {
     @ApiModelProperty(value = "发票内容")
     private String billContent;
 
+    @ApiModelProperty(value = "收票人firstName")
+    private String billFirstName;
+
+    @ApiModelProperty(value = "收票人secondName")
+    private String billSecondName;
+
     @ApiModelProperty(value = "收票人电话")
     private String billReceiverPhone;
 
     @ApiModelProperty(value = "收票人邮箱")
     private String billReceiverEmail;
 
+    @ApiModelProperty(value = "收票邮编")
+    private String billPostCode;
+
+    @ApiModelProperty(value = "收票国家")
+    private String billCountry;
+
+    @ApiModelProperty(value = "收票省")
+    private String billProvince;
+
+    @ApiModelProperty(value = "收票城市")
+    private String billCity;
+
+    @ApiModelProperty(value = "收票区")
+    private String billRegion;
+
+    @ApiModelProperty(value = "收票详细地址")
+    private String billDetailAddress;
+
     @ApiModelProperty(value = "收货人姓名")
     private String receiverName;
+
+    @ApiModelProperty(value = "收货人firstName")
+    private String receiverFirstName;
+
+    @ApiModelProperty(value = "收货人secondName")
+    private String receiverSecondName;
 
     @ApiModelProperty(value = "收货人电话")
     private String receiverPhone;
 
     @ApiModelProperty(value = "收货人邮编")
     private String receiverPostCode;
+
+    @ApiModelProperty(value = "收货人国家")
+    private String receiverCountry;
 
     @ApiModelProperty(value = "省份/直辖市")
     private String receiverProvince;
@@ -346,6 +381,22 @@ public class OmsOrder implements Serializable {
         this.billContent = billContent;
     }
 
+    public String getBillFirstName() {
+        return billFirstName;
+    }
+
+    public void setBillFirstName(String billFirstName) {
+        this.billFirstName = billFirstName;
+    }
+
+    public String getBillSecondName() {
+        return billSecondName;
+    }
+
+    public void setBillSecondName(String billSecondName) {
+        this.billSecondName = billSecondName;
+    }
+
     public String getBillReceiverPhone() {
         return billReceiverPhone;
     }
@@ -362,12 +413,76 @@ public class OmsOrder implements Serializable {
         this.billReceiverEmail = billReceiverEmail;
     }
 
+    public String getBillPostCode() {
+        return billPostCode;
+    }
+
+    public void setBillPostCode(String billPostCode) {
+        this.billPostCode = billPostCode;
+    }
+
+    public String getBillCountry() {
+        return billCountry;
+    }
+
+    public void setBillCountry(String billCountry) {
+        this.billCountry = billCountry;
+    }
+
+    public String getBillProvince() {
+        return billProvince;
+    }
+
+    public void setBillProvince(String billProvince) {
+        this.billProvince = billProvince;
+    }
+
+    public String getBillCity() {
+        return billCity;
+    }
+
+    public void setBillCity(String billCity) {
+        this.billCity = billCity;
+    }
+
+    public String getBillRegion() {
+        return billRegion;
+    }
+
+    public void setBillRegion(String billRegion) {
+        this.billRegion = billRegion;
+    }
+
+    public String getBillDetailAddress() {
+        return billDetailAddress;
+    }
+
+    public void setBillDetailAddress(String billDetailAddress) {
+        this.billDetailAddress = billDetailAddress;
+    }
+
     public String getReceiverName() {
         return receiverName;
     }
 
     public void setReceiverName(String receiverName) {
         this.receiverName = receiverName;
+    }
+
+    public String getReceiverFirstName() {
+        return receiverFirstName;
+    }
+
+    public void setReceiverFirstName(String receiverFirstName) {
+        this.receiverFirstName = receiverFirstName;
+    }
+
+    public String getReceiverSecondName() {
+        return receiverSecondName;
+    }
+
+    public void setReceiverSecondName(String receiverSecondName) {
+        this.receiverSecondName = receiverSecondName;
     }
 
     public String getReceiverPhone() {
@@ -384,6 +499,14 @@ public class OmsOrder implements Serializable {
 
     public void setReceiverPostCode(String receiverPostCode) {
         this.receiverPostCode = receiverPostCode;
+    }
+
+    public String getReceiverCountry() {
+        return receiverCountry;
+    }
+
+    public void setReceiverCountry(String receiverCountry) {
+        this.receiverCountry = receiverCountry;
     }
 
     public String getReceiverProvince() {
@@ -522,11 +645,22 @@ public class OmsOrder implements Serializable {
         sb.append(", billType=").append(billType);
         sb.append(", billHeader=").append(billHeader);
         sb.append(", billContent=").append(billContent);
+        sb.append(", billFirstName=").append(billFirstName);
+        sb.append(", billSecondName=").append(billSecondName);
         sb.append(", billReceiverPhone=").append(billReceiverPhone);
         sb.append(", billReceiverEmail=").append(billReceiverEmail);
+        sb.append(", billPostCode=").append(billPostCode);
+        sb.append(", billCountry=").append(billCountry);
+        sb.append(", billProvince=").append(billProvince);
+        sb.append(", billCity=").append(billCity);
+        sb.append(", billRegion=").append(billRegion);
+        sb.append(", billDetailAddress=").append(billDetailAddress);
         sb.append(", receiverName=").append(receiverName);
+        sb.append(", receiverFirstName=").append(receiverFirstName);
+        sb.append(", receiverSecondName=").append(receiverSecondName);
         sb.append(", receiverPhone=").append(receiverPhone);
         sb.append(", receiverPostCode=").append(receiverPostCode);
+        sb.append(", receiverCountry=").append(receiverCountry);
         sb.append(", receiverProvince=").append(receiverProvince);
         sb.append(", receiverCity=").append(receiverCity);
         sb.append(", receiverRegion=").append(receiverRegion);

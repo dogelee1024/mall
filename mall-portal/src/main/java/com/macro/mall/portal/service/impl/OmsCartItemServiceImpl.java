@@ -2,8 +2,11 @@ package com.macro.mall.portal.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
 import com.macro.mall.mapper.OmsCartItemMapper;
+import com.macro.mall.mapper.PmsSkuStockMapper;
 import com.macro.mall.model.OmsCartItem;
 import com.macro.mall.model.OmsCartItemExample;
+import com.macro.mall.model.PmsSkuStock;
+import com.macro.mall.model.PmsSkuStockExample;
 import com.macro.mall.model.UmsMember;
 import com.macro.mall.portal.dao.PortalProductDao;
 import com.macro.mall.portal.domain.CartProduct;
@@ -29,6 +32,8 @@ public class OmsCartItemServiceImpl implements OmsCartItemService {
     @Autowired
     private OmsCartItemMapper cartItemMapper;
     @Autowired
+    private PmsSkuStockMapper skuStockMapper;
+    @Autowired
     private PortalProductDao productDao;
     @Autowired
     private OmsPromotionService promotionService;
@@ -45,6 +50,11 @@ public class OmsCartItemServiceImpl implements OmsCartItemService {
         OmsCartItem existCartItem = getCartItem(cartItem);
         if (existCartItem == null) {
             cartItem.setCreateDate(new Date());
+
+            PmsSkuStockExample skuExample = new PmsSkuStockExample();
+            skuExample.createCriteria().andProductIdEqualTo(cartItem.getProductId());
+            List<PmsSkuStock> skuStockList = skuStockMapper.selectByExample(skuExample);
+            cartItem.setProductSkuId(skuStockList.get(0).getId());
             count = cartItemMapper.insert(cartItem);
         } else {
             cartItem.setModifyDate(new Date());

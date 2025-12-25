@@ -11,6 +11,12 @@ public class UmsMemberReceiveAddress implements Serializable {
     @ApiModelProperty(value = "收货人名称")
     private String name;
 
+    @ApiModelProperty(value = "名")
+    private String firstName;
+
+    @ApiModelProperty(value = "姓")
+    private String secondName;
+
     private String phoneNumber;
 
     @ApiModelProperty(value = "是否为默认")
@@ -58,6 +64,22 @@ public class UmsMemberReceiveAddress implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getSecondName() {
+        return secondName;
+    }
+
+    public void setSecondName(String secondName) {
+        this.secondName = secondName;
     }
 
     public String getPhoneNumber() {
@@ -133,6 +155,8 @@ public class UmsMemberReceiveAddress implements Serializable {
         sb.append(", id=").append(id);
         sb.append(", memberId=").append(memberId);
         sb.append(", name=").append(name);
+        sb.append(", firstName=").append(firstName);
+        sb.append(", secondName=").append(secondName);
         sb.append(", phoneNumber=").append(phoneNumber);
         sb.append(", defaultStatus=").append(defaultStatus);
         sb.append(", postCode=").append(postCode);

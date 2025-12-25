@@ -1,11 +1,17 @@
 package com.macro.mall.portal.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.macro.mall.common.api.CommonResult;
+import com.macro.mall.portal.config.PayPalNvpClient;
 import com.macro.mall.portal.domain.OmsOrderDetail;
+import com.macro.mall.portal.model.RequestPaypalExecute;
 import com.macro.mall.portal.service.OmsPortalOrderService;
 import com.macro.mall.portal.service.PayPalService;
 import com.paypal.api.payments.Links;
 import com.paypal.api.payments.Payment;
+import com.paypal.api.payments.RelatedResources;
+import com.paypal.api.payments.Sale;
+import com.paypal.api.payments.Transaction;
 import com.paypal.base.rest.PayPalRESTException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -30,6 +36,9 @@ public class PayPalController {
 
 	@Autowired
 	private OmsPortalOrderService omsPortalOrderService;
+
+	@Autowired
+	private PayPalNvpClient paypalNvpClient;
 
 
 	/**
@@ -106,21 +115,18 @@ public class PayPalController {
 	/**
 	 * PayPal 回调执行付款
 	 */
-	@GetMapping("/execute")
-	public CommonResult<Map<String, Object>> executePayment(
-		@RequestParam String paymentId,
-		@RequestParam String payerId
+	@PostMapping("/execute")
+	public CommonResult<Boolean> executePayment(
+		@RequestBody RequestPaypalExecute request
 	) {
 
 		try {
+			 boolean payPalPaymentCompleted = confirmEcPayment(request.getEcToken());
 
-			Payment payment = payPalService.executePayment(paymentId, payerId);
-			String status = payment.getState(); // completed, approved, failed...
-
-			String outTradeNo = getInvoiceNumber(payment);
-
-			log.info("[PayPal] 支付回调 paymentId={} state={} outTradeNo={}",
-				paymentId, status, outTradeNo);
+			if (!payPalPaymentCompleted) {
+				return CommonResult.failed("支付未完成");
+			}
+			String outTradeNo = request.getOutTradeNo();
 
 			if (outTradeNo == null) {
 				return CommonResult.failed("回调缺失订单号");
@@ -137,7 +143,12 @@ public class PayPalController {
 			// ————————————————————————
 			// 2. 防重复回调
 			// ————————————————————————
-			if (order.getStatus() != 0) {
+
+			omsPortalOrderService.paySuccessByOrderSn(outTradeNo, 3);
+
+			log.info("[PayPal] 订单支付成功，状态已更新 outTradeNo={}", outTradeNo);
+
+			/*if (order.getStatus() != 0) {
 				log.info("[PayPal] 订单已支付，无需重复处理 outTradeNo={}", outTradeNo);
 			} else {
 				// ————————————————————————
@@ -145,28 +156,85 @@ public class PayPalController {
 				// ————————————————————————
 				if ("approved".equalsIgnoreCase(status) || "completed".equalsIgnoreCase(status)) {
 
-					omsPortalOrderService.paySuccessByOrderSn(outTradeNo, 1);
 
-					log.info("[PayPal] 订单支付成功，状态已更新 outTradeNo={}", outTradeNo);
 				}
-			}
+			}*/
 
 			// ————————————————————————
 			// 4. 返回前端
 			// ————————————————————————
-			Map<String, Object> data = new HashMap<>();
+		/*	Map<String, Object> data = new HashMap<>();
 			data.put("paymentId", paymentId);
 			data.put("status", status);
 			data.put("transactionId", getTransactionId(payment));
-			data.put("outTradeNo", outTradeNo);
+			data.put("outTradeNo", outTradeNo);*/
 
-			return CommonResult.success(data);
+			return CommonResult.success(true);
 
-		} catch (PayPalRESTException e) {
+		} catch (Exception e) {
 			log.error("[PayPal] 支付执行失败", e);
 			return CommonResult.failed("PayPal 支付失败，请稍后尝试");
 		}
 	}
+
+	public boolean confirmEcPayment(String ecToken) {
+
+		Map<String, String> resp = paypalNvpClient.getExpressCheckoutDetails(ecToken);
+
+		// 1. API 调用成功
+		if (!"Success".equals(resp.get("ACK"))) {
+			return false;
+		}
+
+		// 2. 检查结账状态
+		if (!"PaymentActionCompleted".equals(resp.get("CHECKOUTSTATUS"))) {
+			return false;
+		}
+
+		// 3. 拿到交易号
+		String txnId = resp.get("PAYMENTREQUEST_0_TRANSACTIONID");
+		if (txnId == null || txnId.isEmpty()) {
+			return false;
+		}
+
+		// ✅ 可以落库订单
+		return true;
+	}
+
+
+	public boolean isPayPalPaymentCompleted(Payment payment) {
+
+		if (payment == null) {
+			return false;
+		}
+
+		// 1️⃣ Payment 层状态
+		if (!("approved".equals(payment.getState())
+			|| "completed".equals(payment.getState()))) {
+			return false;
+		}
+
+		// 2️⃣ Transaction
+		if (payment.getTransactions() == null) {
+			return false;
+		}
+
+		for (Transaction tx : payment.getTransactions()) {
+			if (tx.getRelatedResources() == null) {
+				continue;
+			}
+
+			for (RelatedResources rr : tx.getRelatedResources()) {
+				Sale sale = rr.getSale();
+				if (sale != null && "completed".equals(sale.getState())) {
+					return true; // ✅ 真正完成
+				}
+			}
+		}
+
+		return false;
+	}
+
 
 	/**
 	 * 查询 PayPal 支付详情

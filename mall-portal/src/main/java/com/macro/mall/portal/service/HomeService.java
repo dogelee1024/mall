@@ -1,5 +1,6 @@
 package com.macro.mall.portal.service;
 
+import com.macro.mall.common.api.CommonPage;
 import com.macro.mall.model.CmsSubject;
 import com.macro.mall.model.PmsProduct;
 import com.macro.mall.model.PmsProductCategory;
@@ -31,6 +32,9 @@ public interface HomeService {
      * @param parentId 0:获取一级分类；其他：获取指定二级分类
      */
     List<PmsProductCategory> getProductCateList(Long parentId);
+
+    CommonPage<PmsProductCategory> getProductCateListByLevel(Integer level, Integer pageNum, Integer pageSize);
+
 
     /**
      * 获取商品分类

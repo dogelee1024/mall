@@ -294,6 +294,146 @@ public class UmsMemberReceiveAddressExample {
             return (Criteria) this;
         }
 
+        public Criteria andFirstNameIsNull() {
+            addCriterion("first_name is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andFirstNameIsNotNull() {
+            addCriterion("first_name is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andFirstNameEqualTo(String value) {
+            addCriterion("first_name =", value, "firstName");
+            return (Criteria) this;
+        }
+
+        public Criteria andFirstNameNotEqualTo(String value) {
+            addCriterion("first_name <>", value, "firstName");
+            return (Criteria) this;
+        }
+
+        public Criteria andFirstNameGreaterThan(String value) {
+            addCriterion("first_name >", value, "firstName");
+            return (Criteria) this;
+        }
+
+        public Criteria andFirstNameGreaterThanOrEqualTo(String value) {
+            addCriterion("first_name >=", value, "firstName");
+            return (Criteria) this;
+        }
+
+        public Criteria andFirstNameLessThan(String value) {
+            addCriterion("first_name <", value, "firstName");
+            return (Criteria) this;
+        }
+
+        public Criteria andFirstNameLessThanOrEqualTo(String value) {
+            addCriterion("first_name <=", value, "firstName");
+            return (Criteria) this;
+        }
+
+        public Criteria andFirstNameLike(String value) {
+            addCriterion("first_name like", value, "firstName");
+            return (Criteria) this;
+        }
+
+        public Criteria andFirstNameNotLike(String value) {
+            addCriterion("first_name not like", value, "firstName");
+            return (Criteria) this;
+        }
+
+        public Criteria andFirstNameIn(List<String> values) {
+            addCriterion("first_name in", values, "firstName");
+            return (Criteria) this;
+        }
+
+        public Criteria andFirstNameNotIn(List<String> values) {
+            addCriterion("first_name not in", values, "firstName");
+            return (Criteria) this;
+        }
+
+        public Criteria andFirstNameBetween(String value1, String value2) {
+            addCriterion("first_name between", value1, value2, "firstName");
+            return (Criteria) this;
+        }
+
+        public Criteria andFirstNameNotBetween(String value1, String value2) {
+            addCriterion("first_name not between", value1, value2, "firstName");
+            return (Criteria) this;
+        }
+
+        public Criteria andSecondNameIsNull() {
+            addCriterion("second_name is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSecondNameIsNotNull() {
+            addCriterion("second_name is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSecondNameEqualTo(String value) {
+            addCriterion("second_name =", value, "secondName");
+            return (Criteria) this;
+        }
+
+        public Criteria andSecondNameNotEqualTo(String value) {
+            addCriterion("second_name <>", value, "secondName");
+            return (Criteria) this;
+        }
+
+        public Criteria andSecondNameGreaterThan(String value) {
+            addCriterion("second_name >", value, "secondName");
+            return (Criteria) this;
+        }
+
+        public Criteria andSecondNameGreaterThanOrEqualTo(String value) {
+            addCriterion("second_name >=", value, "secondName");
+            return (Criteria) this;
+        }
+
+        public Criteria andSecondNameLessThan(String value) {
+            addCriterion("second_name <", value, "secondName");
+            return (Criteria) this;
+        }
+
+        public Criteria andSecondNameLessThanOrEqualTo(String value) {
+            addCriterion("second_name <=", value, "secondName");
+            return (Criteria) this;
+        }
+
+        public Criteria andSecondNameLike(String value) {
+            addCriterion("second_name like", value, "secondName");
+            return (Criteria) this;
+        }
+
+        public Criteria andSecondNameNotLike(String value) {
+            addCriterion("second_name not like", value, "secondName");
+            return (Criteria) this;
+        }
+
+        public Criteria andSecondNameIn(List<String> values) {
+            addCriterion("second_name in", values, "secondName");
+            return (Criteria) this;
+        }
+
+        public Criteria andSecondNameNotIn(List<String> values) {
+            addCriterion("second_name not in", values, "secondName");
+            return (Criteria) this;
+        }
+
+        public Criteria andSecondNameBetween(String value1, String value2) {
+            addCriterion("second_name between", value1, value2, "secondName");
+            return (Criteria) this;
+        }
+
+        public Criteria andSecondNameNotBetween(String value1, String value2) {
+            addCriterion("second_name not between", value1, value2, "secondName");
+            return (Criteria) this;
+        }
+
         public Criteria andPhoneNumberIsNull() {
             addCriterion("phone_number is null");
             return (Criteria) this;

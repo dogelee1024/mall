@@ -5,6 +5,8 @@
     <id column="id" jdbcType="BIGINT" property="id" />
     <result column="member_id" jdbcType="BIGINT" property="memberId" />
     <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="first_name" jdbcType="VARCHAR" property="firstName" />
+    <result column="second_name" jdbcType="VARCHAR" property="secondName" />
     <result column="phone_number" jdbcType="VARCHAR" property="phoneNumber" />
     <result column="default_status" jdbcType="INTEGER" property="defaultStatus" />
     <result column="post_code" jdbcType="VARCHAR" property="postCode" />
@@ -73,8 +75,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, member_id, name, phone_number, default_status, post_code, country, province, 
-    city, region, detail_address
+    id, member_id, name, first_name, second_name, phone_number, default_status, post_code, 
+    country, province, city, region, detail_address
   </sql>
   <select id="selectByExample" parameterType="com.macro.mall.model.UmsMemberReceiveAddressExample" resultMap="BaseResultMap">
     select
@@ -110,14 +112,16 @@
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into ums_member_receive_address (member_id, name, phone_number, 
-      default_status, post_code, country, 
-      province, city, region, 
-      detail_address)
-    values (#{memberId,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{phoneNumber,jdbcType=VARCHAR}, 
-      #{defaultStatus,jdbcType=INTEGER}, #{postCode,jdbcType=VARCHAR}, #{country,jdbcType=VARCHAR}, 
-      #{province,jdbcType=VARCHAR}, #{city,jdbcType=VARCHAR}, #{region,jdbcType=VARCHAR}, 
-      #{detailAddress,jdbcType=VARCHAR})
+    insert into ums_member_receive_address (member_id, name, first_name, 
+      second_name, phone_number, default_status, 
+      post_code, country, province, 
+      city, region, detail_address
+      )
+    values (#{memberId,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{firstName,jdbcType=VARCHAR}, 
+      #{secondName,jdbcType=VARCHAR}, #{phoneNumber,jdbcType=VARCHAR}, #{defaultStatus,jdbcType=INTEGER}, 
+      #{postCode,jdbcType=VARCHAR}, #{country,jdbcType=VARCHAR}, #{province,jdbcType=VARCHAR}, 
+      #{city,jdbcType=VARCHAR}, #{region,jdbcType=VARCHAR}, #{detailAddress,jdbcType=VARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.macro.mall.model.UmsMemberReceiveAddress">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
@@ -130,6 +134,12 @@
       </if>
       <if test="name != null">
         name,
+      </if>
+      <if test="firstName != null">
+        first_name,
+      </if>
+      <if test="secondName != null">
+        second_name,
       </if>
       <if test="phoneNumber != null">
         phone_number,
@@ -162,6 +172,12 @@
       </if>
       <if test="name != null">
         #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="firstName != null">
+        #{firstName,jdbcType=VARCHAR},
+      </if>
+      <if test="secondName != null">
+        #{secondName,jdbcType=VARCHAR},
       </if>
       <if test="phoneNumber != null">
         #{phoneNumber,jdbcType=VARCHAR},
@@ -207,6 +223,12 @@
       <if test="row.name != null">
         name = #{row.name,jdbcType=VARCHAR},
       </if>
+      <if test="row.firstName != null">
+        first_name = #{row.firstName,jdbcType=VARCHAR},
+      </if>
+      <if test="row.secondName != null">
+        second_name = #{row.secondName,jdbcType=VARCHAR},
+      </if>
       <if test="row.phoneNumber != null">
         phone_number = #{row.phoneNumber,jdbcType=VARCHAR},
       </if>
@@ -241,6 +263,8 @@
     set id = #{row.id,jdbcType=BIGINT},
       member_id = #{row.memberId,jdbcType=BIGINT},
       name = #{row.name,jdbcType=VARCHAR},
+      first_name = #{row.firstName,jdbcType=VARCHAR},
+      second_name = #{row.secondName,jdbcType=VARCHAR},
       phone_number = #{row.phoneNumber,jdbcType=VARCHAR},
       default_status = #{row.defaultStatus,jdbcType=INTEGER},
       post_code = #{row.postCode,jdbcType=VARCHAR},
@@ -261,6 +285,12 @@
       </if>
       <if test="name != null">
         name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="firstName != null">
+        first_name = #{firstName,jdbcType=VARCHAR},
+      </if>
+      <if test="secondName != null">
+        second_name = #{secondName,jdbcType=VARCHAR},
       </if>
       <if test="phoneNumber != null">
         phone_number = #{phoneNumber,jdbcType=VARCHAR},
@@ -293,6 +323,8 @@
     update ums_member_receive_address
     set member_id = #{memberId,jdbcType=BIGINT},
       name = #{name,jdbcType=VARCHAR},
+      first_name = #{firstName,jdbcType=VARCHAR},
+      second_name = #{secondName,jdbcType=VARCHAR},
       phone_number = #{phoneNumber,jdbcType=VARCHAR},
       default_status = #{defaultStatus,jdbcType=INTEGER},
       post_code = #{postCode,jdbcType=VARCHAR},

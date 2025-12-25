@@ -12,6 +12,15 @@ public class UmsMember implements Serializable {
     @ApiModelProperty(value = "用户名")
     private String username;
 
+    @ApiModelProperty(value = "名")
+    private String firstName;
+
+    @ApiModelProperty(value = "姓")
+    private String secondName;
+
+    @ApiModelProperty(value = "email")
+    private String email;
+
     @ApiModelProperty(value = "密码")
     private String password;
 
@@ -84,6 +93,30 @@ public class UmsMember implements Serializable {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getSecondName() {
+        return secondName;
+    }
+
+    public void setSecondName(String secondName) {
+        this.secondName = secondName;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getPassword() {
@@ -223,6 +256,9 @@ public class UmsMember implements Serializable {
         sb.append(", id=").append(id);
         sb.append(", memberLevelId=").append(memberLevelId);
         sb.append(", username=").append(username);
+        sb.append(", firstName=").append(firstName);
+        sb.append(", secondName=").append(secondName);
+        sb.append(", email=").append(email);
         sb.append(", password=").append(password);
         sb.append(", nickname=").append(nickname);
         sb.append(", phone=").append(phone);

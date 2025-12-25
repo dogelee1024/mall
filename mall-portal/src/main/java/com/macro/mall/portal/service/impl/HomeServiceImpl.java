@@ -1,12 +1,15 @@
 package com.macro.mall.portal.service.impl;
 
+import cn.hutool.core.collection.CollUtil;
 import com.github.pagehelper.PageHelper;
+import com.macro.mall.common.api.CommonPage;
 import com.macro.mall.mapper.*;
 import com.macro.mall.model.*;
 import com.macro.mall.portal.dao.HomeDao;
 import com.macro.mall.portal.domain.FlashPromotionProduct;
 import com.macro.mall.portal.domain.HomeContentResult;
 import com.macro.mall.portal.domain.HomeFlashPromotion;
+import com.macro.mall.portal.domain.OmsOrderDetail;
 import com.macro.mall.portal.model.CategoryProductBO;
 import com.macro.mall.portal.service.HomeService;
 import com.macro.mall.portal.util.DateUtil;
@@ -80,6 +83,30 @@ public class HomeServiceImpl implements HomeService {
                 .andParentIdEqualTo(parentId);
         example.setOrderByClause("sort desc");
         return productCategoryMapper.selectByExample(example);
+    }
+
+    @Override
+    public CommonPage<PmsProductCategory> getProductCateListByLevel(Integer level, Integer pageNum, Integer pageSize) {
+
+        PageHelper.startPage(pageNum,pageSize);
+        PmsProductCategoryExample example = new PmsProductCategoryExample();
+        example.createCriteria()
+            .andNavStatusEqualTo(1)
+            .andLevelEqualTo(level);
+        example.setOrderByClause("parent_id asc");
+        List<PmsProductCategory> pmsProductCategories = productCategoryMapper.selectByExample(example);
+        CommonPage<PmsProductCategory> orderPage = CommonPage.restPage(pmsProductCategories);
+        //设置分页信息
+        CommonPage<PmsProductCategory> resultPage = new CommonPage<>();
+        resultPage.setPageNum(orderPage.getPageNum());
+        resultPage.setPageSize(orderPage.getPageSize());
+        resultPage.setTotal(orderPage.getTotal());
+        resultPage.setTotalPage(orderPage.getTotalPage());
+        if(CollUtil.isEmpty(pmsProductCategories)){
+            return resultPage;
+        }
+        resultPage.setList(pmsProductCategories);
+        return resultPage;
     }
 
     /**

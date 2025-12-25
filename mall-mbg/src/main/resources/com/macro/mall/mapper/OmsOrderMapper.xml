@@ -28,11 +28,22 @@
     <result column="bill_type" jdbcType="INTEGER" property="billType" />
     <result column="bill_header" jdbcType="VARCHAR" property="billHeader" />
     <result column="bill_content" jdbcType="VARCHAR" property="billContent" />
+    <result column="bill_first_name" jdbcType="VARCHAR" property="billFirstName" />
+    <result column="bill_second_name" jdbcType="VARCHAR" property="billSecondName" />
     <result column="bill_receiver_phone" jdbcType="VARCHAR" property="billReceiverPhone" />
     <result column="bill_receiver_email" jdbcType="VARCHAR" property="billReceiverEmail" />
+    <result column="bill_post_code" jdbcType="VARCHAR" property="billPostCode" />
+    <result column="bill_country" jdbcType="VARCHAR" property="billCountry" />
+    <result column="bill_province" jdbcType="VARCHAR" property="billProvince" />
+    <result column="bill_city" jdbcType="VARCHAR" property="billCity" />
+    <result column="bill_region" jdbcType="VARCHAR" property="billRegion" />
+    <result column="bill_detail_address" jdbcType="VARCHAR" property="billDetailAddress" />
     <result column="receiver_name" jdbcType="VARCHAR" property="receiverName" />
+    <result column="receiver_first_name" jdbcType="VARCHAR" property="receiverFirstName" />
+    <result column="receiver_second_name" jdbcType="VARCHAR" property="receiverSecondName" />
     <result column="receiver_phone" jdbcType="VARCHAR" property="receiverPhone" />
     <result column="receiver_post_code" jdbcType="VARCHAR" property="receiverPostCode" />
+    <result column="receiver_country" jdbcType="VARCHAR" property="receiverCountry" />
     <result column="receiver_province" jdbcType="VARCHAR" property="receiverProvince" />
     <result column="receiver_city" jdbcType="VARCHAR" property="receiverCity" />
     <result column="receiver_region" jdbcType="VARCHAR" property="receiverRegion" />
@@ -109,8 +120,10 @@
     id, member_id, coupon_id, order_sn, create_time, member_username, total_amount, pay_amount, 
     freight_amount, promotion_amount, integration_amount, coupon_amount, discount_amount, 
     pay_type, source_type, status, order_type, delivery_company, delivery_sn, auto_confirm_day, 
-    integration, growth, promotion_info, bill_type, bill_header, bill_content, bill_receiver_phone, 
-    bill_receiver_email, receiver_name, receiver_phone, receiver_post_code, receiver_province, 
+    integration, growth, promotion_info, bill_type, bill_header, bill_content, bill_first_name, 
+    bill_second_name, bill_receiver_phone, bill_receiver_email, bill_post_code, bill_country, 
+    bill_province, bill_city, bill_region, bill_detail_address, receiver_name, receiver_first_name, 
+    receiver_second_name, receiver_phone, receiver_post_code, receiver_country, receiver_province, 
     receiver_city, receiver_region, receiver_detail_address, note, confirm_status, delete_status, 
     use_integration, payment_time, delivery_time, receive_time, comment_time, modify_time
   </sql>
@@ -156,8 +169,12 @@
       order_type, delivery_company, delivery_sn, 
       auto_confirm_day, integration, growth, 
       promotion_info, bill_type, bill_header, 
-      bill_content, bill_receiver_phone, bill_receiver_email, 
-      receiver_name, receiver_phone, receiver_post_code, 
+      bill_content, bill_first_name, bill_second_name, 
+      bill_receiver_phone, bill_receiver_email, bill_post_code, 
+      bill_country, bill_province, bill_city, 
+      bill_region, bill_detail_address, receiver_name, 
+      receiver_first_name, receiver_second_name, 
+      receiver_phone, receiver_post_code, receiver_country, 
       receiver_province, receiver_city, receiver_region, 
       receiver_detail_address, note, confirm_status, 
       delete_status, use_integration, payment_time, 
@@ -171,8 +188,12 @@
       #{orderType,jdbcType=INTEGER}, #{deliveryCompany,jdbcType=VARCHAR}, #{deliverySn,jdbcType=VARCHAR}, 
       #{autoConfirmDay,jdbcType=INTEGER}, #{integration,jdbcType=INTEGER}, #{growth,jdbcType=INTEGER}, 
       #{promotionInfo,jdbcType=VARCHAR}, #{billType,jdbcType=INTEGER}, #{billHeader,jdbcType=VARCHAR}, 
-      #{billContent,jdbcType=VARCHAR}, #{billReceiverPhone,jdbcType=VARCHAR}, #{billReceiverEmail,jdbcType=VARCHAR}, 
-      #{receiverName,jdbcType=VARCHAR}, #{receiverPhone,jdbcType=VARCHAR}, #{receiverPostCode,jdbcType=VARCHAR}, 
+      #{billContent,jdbcType=VARCHAR}, #{billFirstName,jdbcType=VARCHAR}, #{billSecondName,jdbcType=VARCHAR}, 
+      #{billReceiverPhone,jdbcType=VARCHAR}, #{billReceiverEmail,jdbcType=VARCHAR}, #{billPostCode,jdbcType=VARCHAR}, 
+      #{billCountry,jdbcType=VARCHAR}, #{billProvince,jdbcType=VARCHAR}, #{billCity,jdbcType=VARCHAR}, 
+      #{billRegion,jdbcType=VARCHAR}, #{billDetailAddress,jdbcType=VARCHAR}, #{receiverName,jdbcType=VARCHAR}, 
+      #{receiverFirstName,jdbcType=VARCHAR}, #{receiverSecondName,jdbcType=VARCHAR}, 
+      #{receiverPhone,jdbcType=VARCHAR}, #{receiverPostCode,jdbcType=VARCHAR}, #{receiverCountry,jdbcType=VARCHAR}, 
       #{receiverProvince,jdbcType=VARCHAR}, #{receiverCity,jdbcType=VARCHAR}, #{receiverRegion,jdbcType=VARCHAR}, 
       #{receiverDetailAddress,jdbcType=VARCHAR}, #{note,jdbcType=VARCHAR}, #{confirmStatus,jdbcType=INTEGER}, 
       #{deleteStatus,jdbcType=INTEGER}, #{useIntegration,jdbcType=INTEGER}, #{paymentTime,jdbcType=TIMESTAMP}, 
@@ -260,20 +281,53 @@
       <if test="billContent != null">
         bill_content,
       </if>
+      <if test="billFirstName != null">
+        bill_first_name,
+      </if>
+      <if test="billSecondName != null">
+        bill_second_name,
+      </if>
       <if test="billReceiverPhone != null">
         bill_receiver_phone,
       </if>
       <if test="billReceiverEmail != null">
         bill_receiver_email,
       </if>
+      <if test="billPostCode != null">
+        bill_post_code,
+      </if>
+      <if test="billCountry != null">
+        bill_country,
+      </if>
+      <if test="billProvince != null">
+        bill_province,
+      </if>
+      <if test="billCity != null">
+        bill_city,
+      </if>
+      <if test="billRegion != null">
+        bill_region,
+      </if>
+      <if test="billDetailAddress != null">
+        bill_detail_address,
+      </if>
       <if test="receiverName != null">
         receiver_name,
+      </if>
+      <if test="receiverFirstName != null">
+        receiver_first_name,
+      </if>
+      <if test="receiverSecondName != null">
+        receiver_second_name,
       </if>
       <if test="receiverPhone != null">
         receiver_phone,
       </if>
       <if test="receiverPostCode != null">
         receiver_post_code,
+      </if>
+      <if test="receiverCountry != null">
+        receiver_country,
       </if>
       <if test="receiverProvince != null">
         receiver_province,
@@ -391,20 +445,53 @@
       <if test="billContent != null">
         #{billContent,jdbcType=VARCHAR},
       </if>
+      <if test="billFirstName != null">
+        #{billFirstName,jdbcType=VARCHAR},
+      </if>
+      <if test="billSecondName != null">
+        #{billSecondName,jdbcType=VARCHAR},
+      </if>
       <if test="billReceiverPhone != null">
         #{billReceiverPhone,jdbcType=VARCHAR},
       </if>
       <if test="billReceiverEmail != null">
         #{billReceiverEmail,jdbcType=VARCHAR},
       </if>
+      <if test="billPostCode != null">
+        #{billPostCode,jdbcType=VARCHAR},
+      </if>
+      <if test="billCountry != null">
+        #{billCountry,jdbcType=VARCHAR},
+      </if>
+      <if test="billProvince != null">
+        #{billProvince,jdbcType=VARCHAR},
+      </if>
+      <if test="billCity != null">
+        #{billCity,jdbcType=VARCHAR},
+      </if>
+      <if test="billRegion != null">
+        #{billRegion,jdbcType=VARCHAR},
+      </if>
+      <if test="billDetailAddress != null">
+        #{billDetailAddress,jdbcType=VARCHAR},
+      </if>
       <if test="receiverName != null">
         #{receiverName,jdbcType=VARCHAR},
+      </if>
+      <if test="receiverFirstName != null">
+        #{receiverFirstName,jdbcType=VARCHAR},
+      </if>
+      <if test="receiverSecondName != null">
+        #{receiverSecondName,jdbcType=VARCHAR},
       </if>
       <if test="receiverPhone != null">
         #{receiverPhone,jdbcType=VARCHAR},
       </if>
       <if test="receiverPostCode != null">
         #{receiverPostCode,jdbcType=VARCHAR},
+      </if>
+      <if test="receiverCountry != null">
+        #{receiverCountry,jdbcType=VARCHAR},
       </if>
       <if test="receiverProvince != null">
         #{receiverProvince,jdbcType=VARCHAR},
@@ -534,20 +621,53 @@
       <if test="row.billContent != null">
         bill_content = #{row.billContent,jdbcType=VARCHAR},
       </if>
+      <if test="row.billFirstName != null">
+        bill_first_name = #{row.billFirstName,jdbcType=VARCHAR},
+      </if>
+      <if test="row.billSecondName != null">
+        bill_second_name = #{row.billSecondName,jdbcType=VARCHAR},
+      </if>
       <if test="row.billReceiverPhone != null">
         bill_receiver_phone = #{row.billReceiverPhone,jdbcType=VARCHAR},
       </if>
       <if test="row.billReceiverEmail != null">
         bill_receiver_email = #{row.billReceiverEmail,jdbcType=VARCHAR},
       </if>
+      <if test="row.billPostCode != null">
+        bill_post_code = #{row.billPostCode,jdbcType=VARCHAR},
+      </if>
+      <if test="row.billCountry != null">
+        bill_country = #{row.billCountry,jdbcType=VARCHAR},
+      </if>
+      <if test="row.billProvince != null">
+        bill_province = #{row.billProvince,jdbcType=VARCHAR},
+      </if>
+      <if test="row.billCity != null">
+        bill_city = #{row.billCity,jdbcType=VARCHAR},
+      </if>
+      <if test="row.billRegion != null">
+        bill_region = #{row.billRegion,jdbcType=VARCHAR},
+      </if>
+      <if test="row.billDetailAddress != null">
+        bill_detail_address = #{row.billDetailAddress,jdbcType=VARCHAR},
+      </if>
       <if test="row.receiverName != null">
         receiver_name = #{row.receiverName,jdbcType=VARCHAR},
+      </if>
+      <if test="row.receiverFirstName != null">
+        receiver_first_name = #{row.receiverFirstName,jdbcType=VARCHAR},
+      </if>
+      <if test="row.receiverSecondName != null">
+        receiver_second_name = #{row.receiverSecondName,jdbcType=VARCHAR},
       </if>
       <if test="row.receiverPhone != null">
         receiver_phone = #{row.receiverPhone,jdbcType=VARCHAR},
       </if>
       <if test="row.receiverPostCode != null">
         receiver_post_code = #{row.receiverPostCode,jdbcType=VARCHAR},
+      </if>
+      <if test="row.receiverCountry != null">
+        receiver_country = #{row.receiverCountry,jdbcType=VARCHAR},
       </if>
       <if test="row.receiverProvince != null">
         receiver_province = #{row.receiverProvince,jdbcType=VARCHAR},
@@ -621,11 +741,22 @@
       bill_type = #{row.billType,jdbcType=INTEGER},
       bill_header = #{row.billHeader,jdbcType=VARCHAR},
       bill_content = #{row.billContent,jdbcType=VARCHAR},
+      bill_first_name = #{row.billFirstName,jdbcType=VARCHAR},
+      bill_second_name = #{row.billSecondName,jdbcType=VARCHAR},
       bill_receiver_phone = #{row.billReceiverPhone,jdbcType=VARCHAR},
       bill_receiver_email = #{row.billReceiverEmail,jdbcType=VARCHAR},
+      bill_post_code = #{row.billPostCode,jdbcType=VARCHAR},
+      bill_country = #{row.billCountry,jdbcType=VARCHAR},
+      bill_province = #{row.billProvince,jdbcType=VARCHAR},
+      bill_city = #{row.billCity,jdbcType=VARCHAR},
+      bill_region = #{row.billRegion,jdbcType=VARCHAR},
+      bill_detail_address = #{row.billDetailAddress,jdbcType=VARCHAR},
       receiver_name = #{row.receiverName,jdbcType=VARCHAR},
+      receiver_first_name = #{row.receiverFirstName,jdbcType=VARCHAR},
+      receiver_second_name = #{row.receiverSecondName,jdbcType=VARCHAR},
       receiver_phone = #{row.receiverPhone,jdbcType=VARCHAR},
       receiver_post_code = #{row.receiverPostCode,jdbcType=VARCHAR},
+      receiver_country = #{row.receiverCountry,jdbcType=VARCHAR},
       receiver_province = #{row.receiverProvince,jdbcType=VARCHAR},
       receiver_city = #{row.receiverCity,jdbcType=VARCHAR},
       receiver_region = #{row.receiverRegion,jdbcType=VARCHAR},
@@ -721,20 +852,53 @@
       <if test="billContent != null">
         bill_content = #{billContent,jdbcType=VARCHAR},
       </if>
+      <if test="billFirstName != null">
+        bill_first_name = #{billFirstName,jdbcType=VARCHAR},
+      </if>
+      <if test="billSecondName != null">
+        bill_second_name = #{billSecondName,jdbcType=VARCHAR},
+      </if>
       <if test="billReceiverPhone != null">
         bill_receiver_phone = #{billReceiverPhone,jdbcType=VARCHAR},
       </if>
       <if test="billReceiverEmail != null">
         bill_receiver_email = #{billReceiverEmail,jdbcType=VARCHAR},
       </if>
+      <if test="billPostCode != null">
+        bill_post_code = #{billPostCode,jdbcType=VARCHAR},
+      </if>
+      <if test="billCountry != null">
+        bill_country = #{billCountry,jdbcType=VARCHAR},
+      </if>
+      <if test="billProvince != null">
+        bill_province = #{billProvince,jdbcType=VARCHAR},
+      </if>
+      <if test="billCity != null">
+        bill_city = #{billCity,jdbcType=VARCHAR},
+      </if>
+      <if test="billRegion != null">
+        bill_region = #{billRegion,jdbcType=VARCHAR},
+      </if>
+      <if test="billDetailAddress != null">
+        bill_detail_address = #{billDetailAddress,jdbcType=VARCHAR},
+      </if>
       <if test="receiverName != null">
         receiver_name = #{receiverName,jdbcType=VARCHAR},
+      </if>
+      <if test="receiverFirstName != null">
+        receiver_first_name = #{receiverFirstName,jdbcType=VARCHAR},
+      </if>
+      <if test="receiverSecondName != null">
+        receiver_second_name = #{receiverSecondName,jdbcType=VARCHAR},
       </if>
       <if test="receiverPhone != null">
         receiver_phone = #{receiverPhone,jdbcType=VARCHAR},
       </if>
       <if test="receiverPostCode != null">
         receiver_post_code = #{receiverPostCode,jdbcType=VARCHAR},
+      </if>
+      <if test="receiverCountry != null">
+        receiver_country = #{receiverCountry,jdbcType=VARCHAR},
       </if>
       <if test="receiverProvince != null">
         receiver_province = #{receiverProvince,jdbcType=VARCHAR},
@@ -805,11 +969,22 @@
       bill_type = #{billType,jdbcType=INTEGER},
       bill_header = #{billHeader,jdbcType=VARCHAR},
       bill_content = #{billContent,jdbcType=VARCHAR},
+      bill_first_name = #{billFirstName,jdbcType=VARCHAR},
+      bill_second_name = #{billSecondName,jdbcType=VARCHAR},
       bill_receiver_phone = #{billReceiverPhone,jdbcType=VARCHAR},
       bill_receiver_email = #{billReceiverEmail,jdbcType=VARCHAR},
+      bill_post_code = #{billPostCode,jdbcType=VARCHAR},
+      bill_country = #{billCountry,jdbcType=VARCHAR},
+      bill_province = #{billProvince,jdbcType=VARCHAR},
+      bill_city = #{billCity,jdbcType=VARCHAR},
+      bill_region = #{billRegion,jdbcType=VARCHAR},
+      bill_detail_address = #{billDetailAddress,jdbcType=VARCHAR},
       receiver_name = #{receiverName,jdbcType=VARCHAR},
+      receiver_first_name = #{receiverFirstName,jdbcType=VARCHAR},
+      receiver_second_name = #{receiverSecondName,jdbcType=VARCHAR},
       receiver_phone = #{receiverPhone,jdbcType=VARCHAR},
       receiver_post_code = #{receiverPostCode,jdbcType=VARCHAR},
+      receiver_country = #{receiverCountry,jdbcType=VARCHAR},
       receiver_province = #{receiverProvince,jdbcType=VARCHAR},
       receiver_city = #{receiverCity,jdbcType=VARCHAR},
       receiver_region = #{receiverRegion,jdbcType=VARCHAR},

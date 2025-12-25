@@ -2,10 +2,12 @@ package com.macro.mall.portal.controller;
 
 import com.macro.mall.common.api.CommonPage;
 import com.macro.mall.common.api.CommonResult;
+import com.macro.mall.model.OmsOrder;
 import com.macro.mall.portal.domain.ConfirmOrderResult;
 import com.macro.mall.portal.domain.OmsOrderDetail;
 import com.macro.mall.portal.domain.OrderParam;
 import com.macro.mall.portal.service.OmsPortalOrderService;
+import com.macro.mall.portal.service.PayPalService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
@@ -28,6 +30,8 @@ import java.util.Map;
 public class OmsPortalOrderController {
     @Autowired
     private OmsPortalOrderService portalOrderService;
+    @Autowired
+    private PayPalService payPalService;
 
     @ApiOperation("根据购物车信息生成确认单")
     @RequestMapping(value = "/generateConfirmOrder", method = RequestMethod.POST)
@@ -42,6 +46,9 @@ public class OmsPortalOrderController {
     @ResponseBody
     public CommonResult generateOrder(@RequestBody OrderParam orderParam) {
         Map<String, Object> result = portalOrderService.generateOrder(orderParam);
+        OmsOrder order = (OmsOrder) result.get("order");
+        Map<String, Object> paymentDirect = payPalService.createPaymentDirect(order);
+        result.put("payment", paymentDirect);
         return CommonResult.success(result, "下单成功");
     }
 

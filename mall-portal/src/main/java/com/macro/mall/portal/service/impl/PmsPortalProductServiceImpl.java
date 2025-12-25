@@ -91,7 +91,7 @@ public class PmsPortalProductServiceImpl implements PmsPortalProductService {
         PmsBrand brand = brandMapper.selectByPrimaryKey(product.getBrandId());
         result.setBrand(brand);
         //获取商品属性信息
-        PmsProductAttributeExample attributeExample = new PmsProductAttributeExample();
+       /* PmsProductAttributeExample attributeExample = new PmsProductAttributeExample();
         attributeExample.createCriteria().andProductAttributeCategoryIdEqualTo(product.getProductAttributeCategoryId());
         List<PmsProductAttribute> productAttributeList = productAttributeMapper.selectByExample(attributeExample);
         result.setProductAttributeList(productAttributeList);
@@ -103,7 +103,7 @@ public class PmsPortalProductServiceImpl implements PmsPortalProductService {
                     .andProductAttributeIdIn(attributeIds);
             List<PmsProductAttributeValue> productAttributeValueList = productAttributeValueMapper.selectByExample(attributeValueExample);
             result.setProductAttributeValueList(productAttributeValueList);
-        }
+        }*/
         //获取商品SKU库存信息
         PmsSkuStockExample skuExample = new PmsSkuStockExample();
         skuExample.createCriteria().andProductIdEqualTo(product.getId());

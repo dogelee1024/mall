@@ -4,6 +4,7 @@ import com.macro.mall.common.api.CommonResult;
 import com.macro.mall.model.OmsCartItem;
 import com.macro.mall.portal.domain.CartProduct;
 import com.macro.mall.portal.domain.CartPromotionItem;
+import com.macro.mall.portal.model.RequestDeleteCartItem;
 import com.macro.mall.portal.service.OmsCartItemService;
 import com.macro.mall.portal.service.UmsMemberService;
 import io.swagger.annotations.Api;
@@ -90,8 +91,8 @@ public class OmsCartItemController {
     @ApiOperation("删除购物车中的指定商品")
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
     @ResponseBody
-    public CommonResult delete(@RequestParam("ids") List<Long> ids) {
-        int count = cartItemService.delete(memberService.getCurrentMember().getId(), ids);
+    public CommonResult delete(@RequestBody RequestDeleteCartItem request) {
+        int count = cartItemService.delete(memberService.getCurrentMember().getId(), request.getIds());
         if (count > 0) {
             return CommonResult.success(count);
         }

@@ -60,6 +60,18 @@ public class OmsOrderItem implements Serializable {
     @ApiModelProperty(value = "商品销售属性:[{'key':'颜色','value':'颜色'},{'key':'容量','value':'4G'}]")
     private String productAttr;
 
+    @ApiModelProperty(value = "名")
+    private String firstName;
+
+    @ApiModelProperty(value = "姓")
+    private String secondName;
+
+    @ApiModelProperty(value = "邮箱")
+    private String email;
+
+    @ApiModelProperty(value = "生日")
+    private String birthday;
+
     private static final long serialVersionUID = 1L;
 
     public Long getId() {
@@ -230,6 +242,38 @@ public class OmsOrderItem implements Serializable {
         this.productAttr = productAttr;
     }
 
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getSecondName() {
+        return secondName;
+    }
+
+    public void setSecondName(String secondName) {
+        this.secondName = secondName;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getBirthday() {
+        return birthday;
+    }
+
+    public void setBirthday(String birthday) {
+        this.birthday = birthday;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -257,6 +301,10 @@ public class OmsOrderItem implements Serializable {
         sb.append(", giftIntegration=").append(giftIntegration);
         sb.append(", giftGrowth=").append(giftGrowth);
         sb.append(", productAttr=").append(productAttr);
+        sb.append(", firstName=").append(firstName);
+        sb.append(", secondName=").append(secondName);
+        sb.append(", email=").append(email);
+        sb.append(", birthday=").append(birthday);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

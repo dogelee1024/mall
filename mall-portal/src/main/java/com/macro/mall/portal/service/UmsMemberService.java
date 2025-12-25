@@ -41,6 +41,8 @@ public interface UmsMemberService {
      */
     UmsMember getCurrentMember();
 
+    UmsMember editMember(UmsMember member);
+
     /**
      * 根据会员id修改会员积分
      */

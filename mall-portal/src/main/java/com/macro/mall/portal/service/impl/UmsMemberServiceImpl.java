@@ -138,7 +138,19 @@ public class UmsMemberServiceImpl implements UmsMemberService {
         SecurityContext ctx = SecurityContextHolder.getContext();
         Authentication auth = ctx.getAuthentication();
         MemberDetails memberDetails = (MemberDetails) auth.getPrincipal();
-        return memberDetails.getUmsMember();
+        UmsMember umsMember = memberDetails.getUmsMember();
+        Long id = umsMember.getId();
+        return memberMapper.selectByPrimaryKey(id);
+    }
+
+    @Override
+    public UmsMember editMember(UmsMember member) {
+        UmsMember currentMember = getCurrentMember();
+        if(!currentMember.getId().equals(member.getId())){
+            return null;
+        }
+        memberMapper.updateByPrimaryKeySelective(member);
+        return member;
     }
 
     @Override

@@ -64,6 +64,8 @@ public class OmsPortalOrderServiceImpl implements OmsPortalOrderService {
     private OmsOrderSettingMapper orderSettingMapper;
     @Autowired
     private OmsOrderItemMapper orderItemMapper;
+    @Autowired
+    private PmsProductMapper productMapper;
 
 
     @Override
@@ -118,6 +120,10 @@ public class OmsPortalOrderServiceImpl implements OmsPortalOrderService {
             orderItem.setPromotionName(cartPromotionItem.getPromotionMessage());
             orderItem.setGiftIntegration(cartPromotionItem.getIntegration());
             orderItem.setGiftGrowth(cartPromotionItem.getGrowth());
+            orderItem.setFirstName(cartPromotionItem.getFirstName());
+            orderItem.setSecondName(cartPromotionItem.getSecondName());
+            orderItem.setEmail(cartPromotionItem.getEmail());
+            orderItem.setBirthday(cartPromotionItem.getBirthday());
             orderItemList.add(orderItem);
         }
         //判断购物车中商品是否都有库存
@@ -167,7 +173,12 @@ public class OmsPortalOrderServiceImpl implements OmsPortalOrderService {
         OmsOrder order = new OmsOrder();
         order.setDiscountAmount(new BigDecimal(0));
         order.setTotalAmount(calcTotalAmount(orderItemList));
-        order.setFreightAmount(new BigDecimal(0));
+        if(order.getTotalAmount().compareTo(new BigDecimal(99)) < 0){
+            order.setFreightAmount(new BigDecimal(30));
+
+        }else {
+            order.setFreightAmount(new BigDecimal(0));
+        }
         order.setPromotionAmount(calcPromotionAmount(orderItemList));
         order.setPromotionInfo(getOrderPromotionInfo(orderItemList));
         if (orderParam.getCouponId() == null) {
@@ -188,7 +199,7 @@ public class OmsPortalOrderServiceImpl implements OmsPortalOrderService {
         order.setMemberId(currentMember.getId());
         order.setCreateTime(new Date());
         order.setMemberUsername(currentMember.getUsername());
-        //支付方式：0->未支付；1->支付宝；2->微信
+        //支付方式：0->未支付；1->支付宝；2->微信 3-payPal
         order.setPayType(orderParam.getPayType());
         //订单来源：0->PC订单；1->app订单
         order.setSourceType(1);
@@ -197,14 +208,26 @@ public class OmsPortalOrderServiceImpl implements OmsPortalOrderService {
         //订单类型：0->正常订单；1->秒杀订单
         order.setOrderType(0);
         //收货人信息：姓名、电话、邮编、地址
-        UmsMemberReceiveAddress address = memberReceiveAddressService.getItem(orderParam.getMemberReceiveAddressId());
-        order.setReceiverName(address.getName());
-        order.setReceiverPhone(address.getPhoneNumber());
-        order.setReceiverPostCode(address.getPostCode());
-        order.setReceiverProvince(address.getProvince());
-        order.setReceiverCity(address.getCity());
-        order.setReceiverRegion(address.getRegion());
-        order.setReceiverDetailAddress(address.getDetailAddress());
+        //UmsMemberReceiveAddress address = memberReceiveAddressService.getItem(orderParam.getMemberReceiveAddressId());
+        order.setReceiverFirstName(orderParam.getReceiverFirstName());
+        order.setReceiverSecondName(orderParam.getReceiverSecondName());
+        order.setReceiverPhone(orderParam.getReceiverPhone());
+        order.setReceiverPostCode(orderParam.getReceiverPostCode());
+        order.setReceiverProvince(orderParam.getReceiverProvince());
+        order.setReceiverCity(orderParam.getReceiverCity());
+        order.setReceiverRegion(orderParam.getReceiverRegion());
+        order.setReceiverDetailAddress(orderParam.getReceiverDetailAddress());
+
+        order.setBillFirstName(orderParam.getBillFirstName());
+        order.setBillSecondName(orderParam.getBillSecondName());
+        order.setBillPostCode(orderParam.getBillPostCode());
+        order.setBillReceiverPhone(orderParam.getBillReceiverPhone());
+        order.setBillCountry(orderParam.getBillCountry());
+        order.setBillProvince(orderParam.getBillProvince());
+        order.setBillCity(orderParam.getBillCity());
+        order.setBillRegion(orderParam.getBillRegion());
+        order.setBillDetailAddress(orderParam.getBillDetailAddress());
+
         //0->未确认；1->已确认
         order.setConfirmStatus(0);
         order.setDeleteStatus(0);
@@ -253,7 +276,7 @@ public class OmsPortalOrderServiceImpl implements OmsPortalOrderService {
         //修改订单支付状态
         OmsOrder order = new OmsOrder();
         order.setId(orderId);
-        order.setStatus(1);
+        order.setStatus(2);
         order.setPaymentTime(new Date());
         order.setPayType(payType);
         OmsOrderExample orderExample = new OmsOrderExample();
@@ -752,9 +775,22 @@ public class OmsPortalOrderServiceImpl implements OmsPortalOrderService {
      */
     private void lockStock(List<CartPromotionItem> cartPromotionItemList) {
         for (CartPromotionItem cartPromotionItem : cartPromotionItemList) {
-            PmsSkuStock skuStock = skuStockMapper.selectByPrimaryKey(cartPromotionItem.getProductSkuId());
+          /*  PmsSkuStock skuStock = skuStockMapper.selectByPrimaryKey(cartPromotionItem.getProductSkuId());
             skuStock.setLockStock(skuStock.getLockStock() + cartPromotionItem.getQuantity());
             int count = portalOrderDao.lockStockBySkuId(cartPromotionItem.getProductSkuId(),cartPromotionItem.getQuantity());
+        */
+
+            PmsProductExample example = new PmsProductExample();
+            example.createCriteria()
+                .andIdEqualTo(cartPromotionItem.getProductId());
+
+            PmsProduct product = new PmsProduct();
+            product.setStock(
+                cartPromotionItem.getRealStock() - cartPromotionItem.getQuantity()
+            );
+
+            int count = productMapper.updateByExampleSelective(product, example);
+
             if(count==0){
                 Asserts.fail("库存不足，无法下单");
             }

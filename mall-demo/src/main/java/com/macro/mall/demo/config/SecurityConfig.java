@@ -30,9 +30,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests()//配置权限
+        http  .cors()
+            .and()
+            .authorizeRequests()//配置权限
 //                .antMatchers("/").access("hasRole('TEST')")//该路径需要TEST角色
 //                .antMatchers("/brand/list").hasAuthority("TEST")//该路径需要TEST权限
+
                 .antMatchers("/**").permitAll()
                 .and()//启用基于http的认证
                 .httpBasic()

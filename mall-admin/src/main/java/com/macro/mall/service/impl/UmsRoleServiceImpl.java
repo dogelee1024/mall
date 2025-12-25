@@ -7,6 +7,7 @@ import com.macro.mall.mapper.UmsRoleMapper;
 import com.macro.mall.mapper.UmsRoleMenuRelationMapper;
 import com.macro.mall.mapper.UmsRoleResourceRelationMapper;
 import com.macro.mall.model.*;
+import com.macro.mall.model.UmsRoleExample.Criteria;
 import com.macro.mall.service.UmsAdminCacheService;
 import com.macro.mall.service.UmsRoleService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,7 +57,9 @@ public class UmsRoleServiceImpl implements UmsRoleService {
 
     @Override
     public List<UmsRole> list() {
-        return roleMapper.selectByExample(new UmsRoleExample());
+        UmsRoleExample umsRoleExample = new UmsRoleExample();
+        umsRoleExample.createCriteria().andIdNotEqualTo(5L);
+        return roleMapper.selectByExample(umsRoleExample);
     }
 
     @Override
@@ -66,6 +69,7 @@ public class UmsRoleServiceImpl implements UmsRoleService {
         if (!StrUtil.isEmpty(keyword)) {
             example.createCriteria().andNameLike("%" + keyword + "%");
         }
+        example.createCriteria().andIdNotEqualTo(5L);
         return roleMapper.selectByExample(example);
     }
 

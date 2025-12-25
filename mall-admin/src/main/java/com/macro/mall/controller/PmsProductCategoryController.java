@@ -4,7 +4,10 @@ import com.macro.mall.common.api.CommonPage;
 import com.macro.mall.common.api.CommonResult;
 import com.macro.mall.dto.PmsProductCategoryParam;
 import com.macro.mall.dto.PmsProductCategoryWithChildrenItem;
+import com.macro.mall.mapper.PmsProductMapper;
+import com.macro.mall.model.PmsProduct;
 import com.macro.mall.model.PmsProductCategory;
+import com.macro.mall.model.PmsProductExample;
 import com.macro.mall.service.PmsProductCategoryService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -27,6 +30,8 @@ import java.util.List;
 public class PmsProductCategoryController {
     @Autowired
     private PmsProductCategoryService productCategoryService;
+    @Autowired
+    private PmsProductMapper productMapper;
 
     @ApiOperation("添加商品分类")
     @RequestMapping(value = "/create", method = RequestMethod.POST)
@@ -61,6 +66,15 @@ public class PmsProductCategoryController {
                                                                 @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize,
                                                                 @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum) {
         List<PmsProductCategory> productCategoryList = productCategoryService.getList(parentId, pageSize, pageNum);
+        productCategoryList.forEach(productCategory -> {
+            Long id = productCategory.getId();
+            PmsProductExample example = new PmsProductExample();
+            example.createCriteria()
+                .andProductCategoryIdEqualTo(id);
+
+            long count = productMapper.countByExample(example);
+            productCategory.setProductCount((int)count);
+        });
         return CommonResult.success(CommonPage.restPage(productCategoryList));
     }
 

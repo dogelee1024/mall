@@ -1,5 +1,6 @@
 package com.macro.mall.portal.controller;
 
+import com.macro.mall.common.api.CommonPage;
 import com.macro.mall.common.api.CommonResult;
 import com.macro.mall.model.CmsSubject;
 import com.macro.mall.model.PmsProduct;
@@ -71,6 +72,14 @@ public class HomeController {
         }).collect(Collectors.toList());
         result.setSubCategoryList(subList);
         return CommonResult.success(result);
+    }
+
+    @ApiOperation("分页获取指定等级商品分类")
+    @RequestMapping(value = "/productCateList/bylevel", method = RequestMethod.GET)
+    @ResponseBody
+    public CommonPage<PmsProductCategory> getProductCateList(@RequestParam Integer level, @RequestParam Integer pageSize, @RequestParam Integer pageNum) {
+
+       return homeService.getProductCateListByLevel(level, pageNum, pageSize);
     }
 
     @ApiOperation("根据分类分页获取专题")

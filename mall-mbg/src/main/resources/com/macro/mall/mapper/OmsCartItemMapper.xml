@@ -20,6 +20,10 @@
     <result column="product_brand" jdbcType="VARCHAR" property="productBrand" />
     <result column="product_sn" jdbcType="VARCHAR" property="productSn" />
     <result column="product_attr" jdbcType="VARCHAR" property="productAttr" />
+    <result column="first_name" jdbcType="VARCHAR" property="firstName" />
+    <result column="second_name" jdbcType="VARCHAR" property="secondName" />
+    <result column="email" jdbcType="VARCHAR" property="email" />
+    <result column="birthday" jdbcType="VARCHAR" property="birthday" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -82,7 +86,8 @@
   <sql id="Base_Column_List">
     id, product_id, product_sku_id, member_id, quantity, price, product_pic, product_name, 
     product_sub_title, product_sku_code, member_nickname, create_date, modify_date, delete_status, 
-    product_category_id, product_brand, product_sn, product_attr
+    product_category_id, product_brand, product_sn, product_attr, first_name, second_name, 
+    email, birthday
   </sql>
   <select id="selectByExample" parameterType="com.macro.mall.model.OmsCartItemExample" resultMap="BaseResultMap">
     select
@@ -123,13 +128,17 @@
       product_name, product_sub_title, product_sku_code, 
       member_nickname, create_date, modify_date, 
       delete_status, product_category_id, product_brand, 
-      product_sn, product_attr)
+      product_sn, product_attr, first_name, 
+      second_name, email, birthday
+      )
     values (#{productId,jdbcType=BIGINT}, #{productSkuId,jdbcType=BIGINT}, #{memberId,jdbcType=BIGINT}, 
       #{quantity,jdbcType=INTEGER}, #{price,jdbcType=DECIMAL}, #{productPic,jdbcType=VARCHAR}, 
       #{productName,jdbcType=VARCHAR}, #{productSubTitle,jdbcType=VARCHAR}, #{productSkuCode,jdbcType=VARCHAR}, 
       #{memberNickname,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, #{modifyDate,jdbcType=TIMESTAMP}, 
       #{deleteStatus,jdbcType=INTEGER}, #{productCategoryId,jdbcType=BIGINT}, #{productBrand,jdbcType=VARCHAR}, 
-      #{productSn,jdbcType=VARCHAR}, #{productAttr,jdbcType=VARCHAR})
+      #{productSn,jdbcType=VARCHAR}, #{productAttr,jdbcType=VARCHAR}, #{firstName,jdbcType=VARCHAR}, 
+      #{secondName,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, #{birthday,jdbcType=VARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.macro.mall.model.OmsCartItem">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
@@ -188,6 +197,18 @@
       <if test="productAttr != null">
         product_attr,
       </if>
+      <if test="firstName != null">
+        first_name,
+      </if>
+      <if test="secondName != null">
+        second_name,
+      </if>
+      <if test="email != null">
+        email,
+      </if>
+      <if test="birthday != null">
+        birthday,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="productId != null">
@@ -240,6 +261,18 @@
       </if>
       <if test="productAttr != null">
         #{productAttr,jdbcType=VARCHAR},
+      </if>
+      <if test="firstName != null">
+        #{firstName,jdbcType=VARCHAR},
+      </if>
+      <if test="secondName != null">
+        #{secondName,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null">
+        #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="birthday != null">
+        #{birthday,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -306,6 +339,18 @@
       <if test="row.productAttr != null">
         product_attr = #{row.productAttr,jdbcType=VARCHAR},
       </if>
+      <if test="row.firstName != null">
+        first_name = #{row.firstName,jdbcType=VARCHAR},
+      </if>
+      <if test="row.secondName != null">
+        second_name = #{row.secondName,jdbcType=VARCHAR},
+      </if>
+      <if test="row.email != null">
+        email = #{row.email,jdbcType=VARCHAR},
+      </if>
+      <if test="row.birthday != null">
+        birthday = #{row.birthday,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="example != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -330,7 +375,11 @@
       product_category_id = #{row.productCategoryId,jdbcType=BIGINT},
       product_brand = #{row.productBrand,jdbcType=VARCHAR},
       product_sn = #{row.productSn,jdbcType=VARCHAR},
-      product_attr = #{row.productAttr,jdbcType=VARCHAR}
+      product_attr = #{row.productAttr,jdbcType=VARCHAR},
+      first_name = #{row.firstName,jdbcType=VARCHAR},
+      second_name = #{row.secondName,jdbcType=VARCHAR},
+      email = #{row.email,jdbcType=VARCHAR},
+      birthday = #{row.birthday,jdbcType=VARCHAR}
     <if test="example != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -389,6 +438,18 @@
       <if test="productAttr != null">
         product_attr = #{productAttr,jdbcType=VARCHAR},
       </if>
+      <if test="firstName != null">
+        first_name = #{firstName,jdbcType=VARCHAR},
+      </if>
+      <if test="secondName != null">
+        second_name = #{secondName,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null">
+        email = #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="birthday != null">
+        birthday = #{birthday,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
@@ -410,7 +471,11 @@
       product_category_id = #{productCategoryId,jdbcType=BIGINT},
       product_brand = #{productBrand,jdbcType=VARCHAR},
       product_sn = #{productSn,jdbcType=VARCHAR},
-      product_attr = #{productAttr,jdbcType=VARCHAR}
+      product_attr = #{productAttr,jdbcType=VARCHAR},
+      first_name = #{firstName,jdbcType=VARCHAR},
+      second_name = #{secondName,jdbcType=VARCHAR},
+      email = #{email,jdbcType=VARCHAR},
+      birthday = #{birthday,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
 </mapper>

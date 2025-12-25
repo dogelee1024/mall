@@ -5,6 +5,9 @@
     <id column="id" jdbcType="BIGINT" property="id" />
     <result column="member_level_id" jdbcType="BIGINT" property="memberLevelId" />
     <result column="username" jdbcType="VARCHAR" property="username" />
+    <result column="first_name" jdbcType="VARCHAR" property="firstName" />
+    <result column="second_name" jdbcType="VARCHAR" property="secondName" />
+    <result column="email" jdbcType="VARCHAR" property="email" />
     <result column="password" jdbcType="VARCHAR" property="password" />
     <result column="nickname" jdbcType="VARCHAR" property="nickname" />
     <result column="phone" jdbcType="VARCHAR" property="phone" />
@@ -81,9 +84,9 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, member_level_id, username, password, nickname, phone, status, create_time, icon, 
-    gender, birthday, city, job, personalized_signature, source_type, integration, growth, 
-    luckey_count, history_integration
+    id, member_level_id, username, first_name, second_name, email, password, nickname, 
+    phone, status, create_time, icon, gender, birthday, city, job, personalized_signature, 
+    source_type, integration, growth, luckey_count, history_integration
   </sql>
   <select id="selectByExample" parameterType="com.macro.mall.model.UmsMemberExample" resultMap="BaseResultMap">
     select
@@ -119,13 +122,15 @@
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into ums_member (member_level_id, username, password, 
+    insert into ums_member (member_level_id, username, first_name, 
+      second_name, email, password, 
       nickname, phone, status, 
       create_time, icon, gender, 
       birthday, city, job, personalized_signature, 
       source_type, integration, growth, 
       luckey_count, history_integration)
-    values (#{memberLevelId,jdbcType=BIGINT}, #{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, 
+    values (#{memberLevelId,jdbcType=BIGINT}, #{username,jdbcType=VARCHAR}, #{firstName,jdbcType=VARCHAR}, 
+      #{secondName,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, 
       #{nickname,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, 
       #{createTime,jdbcType=TIMESTAMP}, #{icon,jdbcType=VARCHAR}, #{gender,jdbcType=INTEGER}, 
       #{birthday,jdbcType=DATE}, #{city,jdbcType=VARCHAR}, #{job,jdbcType=VARCHAR}, #{personalizedSignature,jdbcType=VARCHAR}, 
@@ -143,6 +148,15 @@
       </if>
       <if test="username != null">
         username,
+      </if>
+      <if test="firstName != null">
+        first_name,
+      </if>
+      <if test="secondName != null">
+        second_name,
+      </if>
+      <if test="email != null">
+        email,
       </if>
       <if test="password != null">
         password,
@@ -199,6 +213,15 @@
       </if>
       <if test="username != null">
         #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="firstName != null">
+        #{firstName,jdbcType=VARCHAR},
+      </if>
+      <if test="secondName != null">
+        #{secondName,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null">
+        #{email,jdbcType=VARCHAR},
       </if>
       <if test="password != null">
         #{password,jdbcType=VARCHAR},
@@ -268,6 +291,15 @@
       <if test="row.username != null">
         username = #{row.username,jdbcType=VARCHAR},
       </if>
+      <if test="row.firstName != null">
+        first_name = #{row.firstName,jdbcType=VARCHAR},
+      </if>
+      <if test="row.secondName != null">
+        second_name = #{row.secondName,jdbcType=VARCHAR},
+      </if>
+      <if test="row.email != null">
+        email = #{row.email,jdbcType=VARCHAR},
+      </if>
       <if test="row.password != null">
         password = #{row.password,jdbcType=VARCHAR},
       </if>
@@ -326,6 +358,9 @@
     set id = #{row.id,jdbcType=BIGINT},
       member_level_id = #{row.memberLevelId,jdbcType=BIGINT},
       username = #{row.username,jdbcType=VARCHAR},
+      first_name = #{row.firstName,jdbcType=VARCHAR},
+      second_name = #{row.secondName,jdbcType=VARCHAR},
+      email = #{row.email,jdbcType=VARCHAR},
       password = #{row.password,jdbcType=VARCHAR},
       nickname = #{row.nickname,jdbcType=VARCHAR},
       phone = #{row.phone,jdbcType=VARCHAR},
@@ -354,6 +389,15 @@
       </if>
       <if test="username != null">
         username = #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="firstName != null">
+        first_name = #{firstName,jdbcType=VARCHAR},
+      </if>
+      <if test="secondName != null">
+        second_name = #{secondName,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null">
+        email = #{email,jdbcType=VARCHAR},
       </if>
       <if test="password != null">
         password = #{password,jdbcType=VARCHAR},
@@ -410,6 +454,9 @@
     update ums_member
     set member_level_id = #{memberLevelId,jdbcType=BIGINT},
       username = #{username,jdbcType=VARCHAR},
+      first_name = #{firstName,jdbcType=VARCHAR},
+      second_name = #{secondName,jdbcType=VARCHAR},
+      email = #{email,jdbcType=VARCHAR},
       password = #{password,jdbcType=VARCHAR},
       nickname = #{nickname,jdbcType=VARCHAR},
       phone = #{phone,jdbcType=VARCHAR},

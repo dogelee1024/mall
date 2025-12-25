@@ -1,6 +1,8 @@
 package com.macro.mall.portal.controller;
 
 import com.macro.mall.common.api.CommonResult;
+import com.macro.mall.common.api.IErrorCode;
+import com.macro.mall.common.api.ResultCode;
 import com.macro.mall.model.UmsMember;
 import com.macro.mall.portal.model.ReqeustLoginBO;
 import com.macro.mall.portal.service.UmsMemberService;
@@ -83,6 +85,18 @@ public class UmsMemberController {
             return CommonResult.unauthorized(null);
         }
         UmsMember member = memberService.getCurrentMember();
+        return CommonResult.success(member);
+    }
+
+    @ApiOperation("编辑会员信息")
+    @RequestMapping(value = "/edit", method = RequestMethod.POST)
+    @ResponseBody
+    public CommonResult edit(@RequestBody UmsMember member) {
+
+        UmsMember umsMember = memberService.editMember(member);
+        if(umsMember==null){
+            return CommonResult.failed(ResultCode.VALIDATE_FAILED);
+        }
         return CommonResult.success(member);
     }
 
