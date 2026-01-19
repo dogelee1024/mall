@@ -2505,6 +2505,276 @@ public class PmsProductExample {
             addCriterion("product_category_name not between", value1, value2, "productCategoryName");
             return (Criteria) this;
         }
+
+        public Criteria andIsDropshippingIsNull() {
+            addCriterion("is_dropshipping is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsDropshippingIsNotNull() {
+            addCriterion("is_dropshipping is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsDropshippingEqualTo(Byte value) {
+            addCriterion("is_dropshipping =", value, "isDropshipping");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsDropshippingNotEqualTo(Byte value) {
+            addCriterion("is_dropshipping <>", value, "isDropshipping");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsDropshippingGreaterThan(Byte value) {
+            addCriterion("is_dropshipping >", value, "isDropshipping");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsDropshippingGreaterThanOrEqualTo(Byte value) {
+            addCriterion("is_dropshipping >=", value, "isDropshipping");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsDropshippingLessThan(Byte value) {
+            addCriterion("is_dropshipping <", value, "isDropshipping");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsDropshippingLessThanOrEqualTo(Byte value) {
+            addCriterion("is_dropshipping <=", value, "isDropshipping");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsDropshippingIn(List<Byte> values) {
+            addCriterion("is_dropshipping in", values, "isDropshipping");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsDropshippingNotIn(List<Byte> values) {
+            addCriterion("is_dropshipping not in", values, "isDropshipping");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsDropshippingBetween(Byte value1, Byte value2) {
+            addCriterion("is_dropshipping between", value1, value2, "isDropshipping");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsDropshippingNotBetween(Byte value1, Byte value2) {
+            addCriterion("is_dropshipping not between", value1, value2, "isDropshipping");
+            return (Criteria) this;
+        }
+
+        public Criteria andDropshippingProductIdIsNull() {
+            addCriterion("dropshipping_product_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDropshippingProductIdIsNotNull() {
+            addCriterion("dropshipping_product_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDropshippingProductIdEqualTo(String value) {
+            addCriterion("dropshipping_product_id =", value, "dropshippingProductId");
+            return (Criteria) this;
+        }
+
+        public Criteria andDropshippingProductIdNotEqualTo(String value) {
+            addCriterion("dropshipping_product_id <>", value, "dropshippingProductId");
+            return (Criteria) this;
+        }
+
+        public Criteria andDropshippingProductIdGreaterThan(String value) {
+            addCriterion("dropshipping_product_id >", value, "dropshippingProductId");
+            return (Criteria) this;
+        }
+
+        public Criteria andDropshippingProductIdGreaterThanOrEqualTo(String value) {
+            addCriterion("dropshipping_product_id >=", value, "dropshippingProductId");
+            return (Criteria) this;
+        }
+
+        public Criteria andDropshippingProductIdLessThan(String value) {
+            addCriterion("dropshipping_product_id <", value, "dropshippingProductId");
+            return (Criteria) this;
+        }
+
+        public Criteria andDropshippingProductIdLessThanOrEqualTo(String value) {
+            addCriterion("dropshipping_product_id <=", value, "dropshippingProductId");
+            return (Criteria) this;
+        }
+
+        public Criteria andDropshippingProductIdLike(String value) {
+            addCriterion("dropshipping_product_id like", value, "dropshippingProductId");
+            return (Criteria) this;
+        }
+
+        public Criteria andDropshippingProductIdNotLike(String value) {
+            addCriterion("dropshipping_product_id not like", value, "dropshippingProductId");
+            return (Criteria) this;
+        }
+
+        public Criteria andDropshippingProductIdIn(List<String> values) {
+            addCriterion("dropshipping_product_id in", values, "dropshippingProductId");
+            return (Criteria) this;
+        }
+
+        public Criteria andDropshippingProductIdNotIn(List<String> values) {
+            addCriterion("dropshipping_product_id not in", values, "dropshippingProductId");
+            return (Criteria) this;
+        }
+
+        public Criteria andDropshippingProductIdBetween(String value1, String value2) {
+            addCriterion("dropshipping_product_id between", value1, value2, "dropshippingProductId");
+            return (Criteria) this;
+        }
+
+        public Criteria andDropshippingProductIdNotBetween(String value1, String value2) {
+            addCriterion("dropshipping_product_id not between", value1, value2, "dropshippingProductId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCountryCodeIsNull() {
+            addCriterion("country_code is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCountryCodeIsNotNull() {
+            addCriterion("country_code is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCountryCodeEqualTo(String value) {
+            addCriterion("country_code =", value, "countryCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andCountryCodeNotEqualTo(String value) {
+            addCriterion("country_code <>", value, "countryCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andCountryCodeGreaterThan(String value) {
+            addCriterion("country_code >", value, "countryCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andCountryCodeGreaterThanOrEqualTo(String value) {
+            addCriterion("country_code >=", value, "countryCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andCountryCodeLessThan(String value) {
+            addCriterion("country_code <", value, "countryCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andCountryCodeLessThanOrEqualTo(String value) {
+            addCriterion("country_code <=", value, "countryCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andCountryCodeLike(String value) {
+            addCriterion("country_code like", value, "countryCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andCountryCodeNotLike(String value) {
+            addCriterion("country_code not like", value, "countryCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andCountryCodeIn(List<String> values) {
+            addCriterion("country_code in", values, "countryCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andCountryCodeNotIn(List<String> values) {
+            addCriterion("country_code not in", values, "countryCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andCountryCodeBetween(String value1, String value2) {
+            addCriterion("country_code between", value1, value2, "countryCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andCountryCodeNotBetween(String value1, String value2) {
+            addCriterion("country_code not between", value1, value2, "countryCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andDropshippingSkuIsNull() {
+            addCriterion("dropshipping_sku is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDropshippingSkuIsNotNull() {
+            addCriterion("dropshipping_sku is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDropshippingSkuEqualTo(String value) {
+            addCriterion("dropshipping_sku =", value, "dropshippingSku");
+            return (Criteria) this;
+        }
+
+        public Criteria andDropshippingSkuNotEqualTo(String value) {
+            addCriterion("dropshipping_sku <>", value, "dropshippingSku");
+            return (Criteria) this;
+        }
+
+        public Criteria andDropshippingSkuGreaterThan(String value) {
+            addCriterion("dropshipping_sku >", value, "dropshippingSku");
+            return (Criteria) this;
+        }
+
+        public Criteria andDropshippingSkuGreaterThanOrEqualTo(String value) {
+            addCriterion("dropshipping_sku >=", value, "dropshippingSku");
+            return (Criteria) this;
+        }
+
+        public Criteria andDropshippingSkuLessThan(String value) {
+            addCriterion("dropshipping_sku <", value, "dropshippingSku");
+            return (Criteria) this;
+        }
+
+        public Criteria andDropshippingSkuLessThanOrEqualTo(String value) {
+            addCriterion("dropshipping_sku <=", value, "dropshippingSku");
+            return (Criteria) this;
+        }
+
+        public Criteria andDropshippingSkuLike(String value) {
+            addCriterion("dropshipping_sku like", value, "dropshippingSku");
+            return (Criteria) this;
+        }
+
+        public Criteria andDropshippingSkuNotLike(String value) {
+            addCriterion("dropshipping_sku not like", value, "dropshippingSku");
+            return (Criteria) this;
+        }
+
+        public Criteria andDropshippingSkuIn(List<String> values) {
+            addCriterion("dropshipping_sku in", values, "dropshippingSku");
+            return (Criteria) this;
+        }
+
+        public Criteria andDropshippingSkuNotIn(List<String> values) {
+            addCriterion("dropshipping_sku not in", values, "dropshippingSku");
+            return (Criteria) this;
+        }
+
+        public Criteria andDropshippingSkuBetween(String value1, String value2) {
+            addCriterion("dropshipping_sku between", value1, value2, "dropshippingSku");
+            return (Criteria) this;
+        }
+
+        public Criteria andDropshippingSkuNotBetween(String value1, String value2) {
+            addCriterion("dropshipping_sku not between", value1, value2, "dropshippingSku");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

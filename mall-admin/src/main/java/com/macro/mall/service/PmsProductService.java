@@ -21,6 +21,9 @@ public interface PmsProductService {
     @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED)
     int create(PmsProductParam productParam);
 
+    @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED)
+    int createFromDropshipping(PmsProductParam productParam);
+
     /**
      * 根据商品ID获取商品信息（用于更新商品）
      */

@@ -3,13 +3,18 @@ package com.macro.mall.service.impl;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
 import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.util.StringUtil;
+import com.macro.mall.common.api.dropshipping.Product;
+import com.macro.mall.common.api.dropshipping.ProductDetailDTO;
 import com.macro.mall.dao.*;
 import com.macro.mall.dto.PmsProductParam;
 import com.macro.mall.dto.PmsProductQueryParam;
 import com.macro.mall.dto.PmsProductResult;
+import com.macro.mall.manager.DropshippingManage;
 import com.macro.mall.mapper.*;
 import com.macro.mall.model.*;
 import com.macro.mall.service.PmsProductService;
+import java.math.BigDecimal;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +27,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
+import org.springframework.util.StringUtils;
 
 /**
  * 商品管理Service实现类
@@ -64,6 +70,8 @@ public class PmsProductServiceImpl implements PmsProductService {
     private PmsProductDao productDao;
     @Autowired
     private PmsProductVertifyRecordDao productVertifyRecordDao;
+    @Autowired
+    private DropshippingManage dropshippingManage;
 
     @Override
     public int create(PmsProductParam productParam) {
@@ -91,6 +99,65 @@ public class PmsProductServiceImpl implements PmsProductService {
         //关联优选
         relateAndInsertList(prefrenceAreaProductRelationDao, productParam.getPrefrenceAreaProductRelationList(), productId);
 
+        count = 1;
+        return count;
+    }
+
+    @Override
+    public int createFromDropshipping(PmsProductParam productParam) {
+        int count;
+
+
+        Product dropshippingProduct = productParam.getDropshippingProduct();
+        if(dropshippingProduct == null) {
+            return 0;
+        }
+
+        ProductDetailDTO productDetail = dropshippingManage.getProductDetail(1, dropshippingProduct.getId());
+        if(productDetail == null) {
+            return 0;
+        }
+        productDetail.getVariants().forEach(variant -> {
+            //创建商品
+            PmsProduct product = productParam;
+            product.setId(null);
+            product.setDescription(productDetail.getDescription());
+
+            product.setIsDropshipping((byte)1);
+            product.setProductSn(dropshippingProduct.getSku());
+            product.setDropshippingProductId(dropshippingProduct.getId());
+            product.setDropshippingSku(variant.getVariantSku());
+            product.setDescription(productDetail.getDescription());
+            product.setCountryCode(productParam.getCountryCode());
+            product.setName(dropshippingProduct.getNameEn());
+            product.setPic(dropshippingProduct.getBigImage());
+            product.setProductCategoryId(productParam.getProductCategoryId());
+            product.setProductCategoryName(productParam.getProductCategoryName());
+            product.setStock(dropshippingProduct.getWarehouseInventoryNum());
+            productMapper.insertSelective(product);
+        });
+        //product.setOriginalPrice(new BigDecimal(dropshippingProduct.getNowPrice()) BigDecimal.() dropshippingProduct.getNowPrice());
+
+
+       /* //根据促销类型设置价格：会员价格、阶梯价格、满减价格
+        Long productId = product.getId();
+        //会员价格
+        relateAndInsertList(memberPriceDao, productParam.getMemberPriceList(), productId);
+        //阶梯价格
+        relateAndInsertList(productLadderDao, productParam.getProductLadderList(), productId);
+        //满减价格
+        relateAndInsertList(productFullReductionDao, productParam.getProductFullReductionList(), productId);
+        //处理sku的编码
+        handleSkuStockCode(productParam.getSkuStockList(),productId);
+        //添加sku库存信息
+        relateAndInsertList(skuStockDao, productParam.getSkuStockList(), productId);
+        //添加商品参数,添加自定义商品规格
+        relateAndInsertList(productAttributeValueDao, productParam.getProductAttributeValueList(), productId);
+        //关联专题
+        relateAndInsertList(subjectProductRelationDao, productParam.getSubjectProductRelationList(), productId);
+        //关联优选
+        relateAndInsertList(prefrenceAreaProductRelationDao, productParam.getPrefrenceAreaProductRelationList(), productId);
+*/
         count = 1;
         return count;
     }

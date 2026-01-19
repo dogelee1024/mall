@@ -47,8 +47,9 @@ public class OmsPortalOrderController {
     public CommonResult generateOrder(@RequestBody OrderParam orderParam) {
         Map<String, Object> result = portalOrderService.generateOrder(orderParam);
         OmsOrder order = (OmsOrder) result.get("order");
-        Map<String, Object> paymentDirect = payPalService.createPaymentDirect(order);
-        result.put("payment", paymentDirect);
+        //Map<String, Object> paymentDirect = payPalService.createPaymentDirect(order);
+        Map<String, Object> paypalOrder = payPalService.createPaypalOrder(order);
+        result.put("payment", paypalOrder);
         return CommonResult.success(result, "下单成功");
     }
 

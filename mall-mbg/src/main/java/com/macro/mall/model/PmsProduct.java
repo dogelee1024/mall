@@ -109,6 +109,18 @@ public class PmsProduct implements Serializable {
     @ApiModelProperty(value = "商品分类名称")
     private String productCategoryName;
 
+    @ApiModelProperty(value = "是否dropshipping商品： 0-不是 1-是")
+    private Byte isDropshipping;
+
+    @ApiModelProperty(value = "dropshipping商品id")
+    private String dropshippingProductId;
+
+    @ApiModelProperty(value = "仓库所在国家")
+    private String countryCode;
+
+    @ApiModelProperty(value = "dropshipping商品skuCode")
+    private String dropshippingSku;
+
     @ApiModelProperty(value = "商品描述")
     private String description;
 
@@ -426,6 +438,38 @@ public class PmsProduct implements Serializable {
         this.productCategoryName = productCategoryName;
     }
 
+    public Byte getIsDropshipping() {
+        return isDropshipping;
+    }
+
+    public void setIsDropshipping(Byte isDropshipping) {
+        this.isDropshipping = isDropshipping;
+    }
+
+    public String getDropshippingProductId() {
+        return dropshippingProductId;
+    }
+
+    public void setDropshippingProductId(String dropshippingProductId) {
+        this.dropshippingProductId = dropshippingProductId;
+    }
+
+    public String getCountryCode() {
+        return countryCode;
+    }
+
+    public void setCountryCode(String countryCode) {
+        this.countryCode = countryCode;
+    }
+
+    public String getDropshippingSku() {
+        return dropshippingSku;
+    }
+
+    public void setDropshippingSku(String dropshippingSku) {
+        this.dropshippingSku = dropshippingSku;
+    }
+
     public String getDescription() {
         return description;
     }
@@ -502,6 +546,10 @@ public class PmsProduct implements Serializable {
         sb.append(", promotionType=").append(promotionType);
         sb.append(", brandName=").append(brandName);
         sb.append(", productCategoryName=").append(productCategoryName);
+        sb.append(", isDropshipping=").append(isDropshipping);
+        sb.append(", dropshippingProductId=").append(dropshippingProductId);
+        sb.append(", countryCode=").append(countryCode);
+        sb.append(", dropshippingSku=").append(dropshippingSku);
         sb.append(", description=").append(description);
         sb.append(", detailDesc=").append(detailDesc);
         sb.append(", detailHtml=").append(detailHtml);

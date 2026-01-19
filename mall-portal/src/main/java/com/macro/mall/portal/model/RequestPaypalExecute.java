@@ -7,6 +7,7 @@ public class RequestPaypalExecute {
 	private String payerId;
 	private String outTradeNo;
 	private String ecToken;
+	private String orderId;
 
 	public String getPaymentId() {
 		return paymentId;
@@ -39,5 +40,13 @@ public class RequestPaypalExecute {
 
 	public void setEcToken(String ecToken) {
 		this.ecToken = ecToken;
+	}
+
+	public String getOrderId() {
+		return orderId;
+	}
+
+	public void setOrderId(String orderId) {
+		this.orderId = orderId;
 	}
 }

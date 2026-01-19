@@ -40,6 +40,18 @@ public class PmsProductController {
         }
     }
 
+    @ApiOperation("创建Dropshipping商品")
+    @RequestMapping(value = "/v2/create", method = RequestMethod.POST)
+    @ResponseBody
+    public CommonResult createFromDropshipping(@RequestBody PmsProductParam productParam) {
+        int count = productService.createFromDropshipping(productParam);
+        if (count > 0) {
+            return CommonResult.success(count);
+        } else {
+            return CommonResult.failed();
+        }
+    }
+
     @ApiOperation("根据商品id获取商品编辑信息")
     @RequestMapping(value = "/updateInfo/{id}", method = RequestMethod.GET)
     @ResponseBody

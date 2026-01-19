@@ -1,5 +1,6 @@
 package com.macro.mall.dto;
 
+import com.macro.mall.common.api.dropshipping.Product;
 import com.macro.mall.model.*;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -28,4 +29,7 @@ public class PmsProductParam extends PmsProduct{
     private List<CmsSubjectProductRelation> subjectProductRelationList;
     @ApiModelProperty("优选专区和商品的关系")
     private List<CmsPrefrenceAreaProductRelation> prefrenceAreaProductRelationList;
+
+    @ApiModelProperty("外部产品")
+    private Product dropshippingProduct;
 }

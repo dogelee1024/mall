@@ -3,11 +3,14 @@ package com.macro.mall.portal.config;
 import com.paypal.base.rest.APIContext;
 import com.paypal.base.rest.OAuthTokenCredential;
 import com.paypal.base.rest.PayPalRESTException;
+import com.paypal.core.PayPalEnvironment;
+import com.paypal.core.PayPalHttpClient;
 import java.util.HashMap;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.util.StringUtils;
 
 @Configuration
 public class PayPalConfig {
@@ -37,5 +40,29 @@ public class PayPalConfig {
 		APIContext context = new APIContext(clientId, clientSecret, mode);
 		context.setConfigurationMap(paypalSdkConfig());
 		return context;
+	}
+
+	@Bean
+	public PayPalHttpClient payPalHttpClient() {
+
+		if (!StringUtils.hasText(clientId) || !StringUtils.hasText(clientSecret)) {
+			throw new IllegalStateException("PayPal clientId or clientSecret is missing");
+		}
+
+		PayPalEnvironment environment;
+
+		if ("live".equalsIgnoreCase(mode)) {
+			environment = new PayPalEnvironment.Live(
+				clientId,
+				clientSecret
+			);
+		} else {
+			environment = new PayPalEnvironment.Sandbox(
+				clientId,
+				clientSecret
+			);
+		}
+
+		return new PayPalHttpClient(environment);
 	}
 }

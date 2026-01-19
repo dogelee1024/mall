@@ -69,6 +69,9 @@ public class OrderParam {
     @ApiModelProperty(value = "收货人邮编")
     private String receiverPostCode;
 
+    @ApiModelProperty(value = "收货国家简码")
+    private String receiverCountryCode;
+
     @ApiModelProperty(value = "收货人国家")
     private String receiverCountry;
 

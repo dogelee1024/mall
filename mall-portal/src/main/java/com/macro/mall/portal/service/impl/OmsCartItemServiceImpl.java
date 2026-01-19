@@ -51,10 +51,10 @@ public class OmsCartItemServiceImpl implements OmsCartItemService {
         if (existCartItem == null) {
             cartItem.setCreateDate(new Date());
 
-            PmsSkuStockExample skuExample = new PmsSkuStockExample();
+           /* PmsSkuStockExample skuExample = new PmsSkuStockExample();
             skuExample.createCriteria().andProductIdEqualTo(cartItem.getProductId());
             List<PmsSkuStock> skuStockList = skuStockMapper.selectByExample(skuExample);
-            cartItem.setProductSkuId(skuStockList.get(0).getId());
+            cartItem.setProductSkuId(skuStockList.get(0).getId());*/
             count = cartItemMapper.insert(cartItem);
         } else {
             cartItem.setModifyDate(new Date());

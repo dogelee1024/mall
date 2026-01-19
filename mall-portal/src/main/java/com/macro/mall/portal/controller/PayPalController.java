@@ -13,6 +13,13 @@ import com.paypal.api.payments.RelatedResources;
 import com.paypal.api.payments.Sale;
 import com.paypal.api.payments.Transaction;
 import com.paypal.base.rest.PayPalRESTException;
+import com.paypal.core.PayPalHttpClient;
+import com.paypal.http.HttpResponse;
+import com.paypal.orders.Order;
+import com.paypal.orders.OrderRequest;
+import com.paypal.orders.OrdersCaptureRequest;
+import com.paypal.orders.PurchaseUnit;
+import io.micrometer.core.instrument.util.StringUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -39,6 +46,9 @@ public class PayPalController {
 
 	@Autowired
 	private PayPalNvpClient paypalNvpClient;
+
+	@Autowired
+	private PayPalHttpClient payPalHttpClient;
 
 
 	/**
@@ -115,6 +125,7 @@ public class PayPalController {
 	/**
 	 * PayPal 回调执行付款
 	 */
+/*
 	@PostMapping("/execute")
 	public CommonResult<Boolean> executePayment(
 		@RequestBody RequestPaypalExecute request
@@ -148,7 +159,8 @@ public class PayPalController {
 
 			log.info("[PayPal] 订单支付成功，状态已更新 outTradeNo={}", outTradeNo);
 
-			/*if (order.getStatus() != 0) {
+			*/
+/*if (order.getStatus() != 0) {
 				log.info("[PayPal] 订单已支付，无需重复处理 outTradeNo={}", outTradeNo);
 			} else {
 				// ————————————————————————
@@ -158,16 +170,19 @@ public class PayPalController {
 
 
 				}
-			}*/
+			}*//*
+
 
 			// ————————————————————————
 			// 4. 返回前端
 			// ————————————————————————
-		/*	Map<String, Object> data = new HashMap<>();
+		*/
+/*	Map<String, Object> data = new HashMap<>();
 			data.put("paymentId", paymentId);
 			data.put("status", status);
 			data.put("transactionId", getTransactionId(payment));
-			data.put("outTradeNo", outTradeNo);*/
+			data.put("outTradeNo", outTradeNo);*//*
+
 
 			return CommonResult.success(true);
 
@@ -176,6 +191,90 @@ public class PayPalController {
 			return CommonResult.failed("PayPal 支付失败，请稍后尝试");
 		}
 	}
+*/
+
+	@PostMapping("/execute")
+	public CommonResult<Boolean> executePayment(
+		@RequestBody RequestPaypalExecute request
+	) {
+
+		String orderId = request.getOrderId();
+		String outTradeNo = request.getOutTradeNo();
+
+		if (StringUtils.isBlank(orderId) || StringUtils.isBlank(outTradeNo)) {
+			return CommonResult.failed("参数缺失");
+		}
+
+		try {
+			// ————————————————————————
+			// 1. 查询本地订单
+			// ————————————————————————
+			OmsOrderDetail order = omsPortalOrderService.detail(outTradeNo);
+			if (order == null) {
+				return CommonResult.failed("订单不存在");
+			}
+
+			// ————————————————————————
+			// 2. 防重复回调（非常重要）
+			// ————————————————————————
+			if (order.getStatus() != 0) {
+				log.info("[PayPal] 订单已处理，无需重复支付 outTradeNo={}", outTradeNo);
+				return CommonResult.success(true);
+			}
+
+			// ————————————————————————
+			// 3. 调用 PayPal Capture
+			// ————————————————————————
+			OrdersCaptureRequest captureRequest = new OrdersCaptureRequest(orderId);
+			captureRequest.requestBody(new OrderRequest());
+
+			HttpResponse<Order> response =
+				payPalHttpClient.execute(captureRequest);
+
+			com.paypal.orders.Order paypalOrder = response.result();
+
+			String status = paypalOrder.status();
+			log.info("[PayPal] capture result status={}, orderId={}", status, orderId);
+
+			// ————————————————————————
+			// 4. 判断支付是否成功
+			// ————————————————————————
+			if (!"COMPLETED".equalsIgnoreCase(status)) {
+				return CommonResult.failed("PayPal 支付未完成，状态=" + status);
+			}
+
+			// ————————————————————————
+			// 5. 金额校验（强烈建议）
+			// ————————————————————————
+			PurchaseUnit purchaseUnit = paypalOrder.purchaseUnits().get(0);
+			String payAmount = purchaseUnit
+				.payments()
+				.captures()
+				.get(0)
+				.amount()
+				.value();
+
+			if (order.getPayAmount().compareTo(new BigDecimal(payAmount)) != 0) {
+				log.error("[PayPal] 金额不一致 outTradeNo={}, local={}, paypal={}",
+					outTradeNo, order.getPayAmount(), payAmount);
+				return CommonResult.failed("支付金额校验失败");
+			}
+
+			// ————————————————————————
+			// 6. 更新订单状态（支付成功）
+			// ————————————————————————
+			omsPortalOrderService.paySuccessByOrderSn(outTradeNo, 3);
+
+			log.info("[PayPal] 支付成功，订单状态已更新 outTradeNo={}", outTradeNo);
+
+			return CommonResult.success(true);
+
+		} catch (Exception e) {
+			log.error("[PayPal] capture 支付失败 outTradeNo={}", outTradeNo, e);
+			return CommonResult.failed("PayPal 支付失败");
+		}
+	}
+
 
 	public boolean confirmEcPayment(String ecToken) {
 

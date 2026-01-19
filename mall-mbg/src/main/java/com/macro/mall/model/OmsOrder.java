@@ -1,12 +1,10 @@
 package com.macro.mall.model;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
-@JsonInclude(JsonInclude.Include.NON_NULL)
 public class OmsOrder implements Serializable {
     @ApiModelProperty(value = "订单id")
     private Long id;

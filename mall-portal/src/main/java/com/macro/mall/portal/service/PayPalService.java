@@ -6,6 +6,12 @@ import com.macro.mall.portal.domain.OmsOrderDetail;
 import com.paypal.api.payments.*;
 import com.paypal.base.rest.APIContext;
 import com.paypal.base.rest.PayPalRESTException;
+import com.paypal.core.PayPalHttpClient;
+import com.paypal.http.HttpResponse;
+import com.paypal.orders.AmountWithBreakdown;
+import com.paypal.orders.OrderRequest;
+import com.paypal.orders.OrdersCreateRequest;
+import com.paypal.orders.PurchaseUnitRequest;
 import java.util.HashMap;
 import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
@@ -24,6 +30,8 @@ public class PayPalService {
 
 	@Autowired
 	private APIContext apiContext;
+	@Autowired
+	private PayPalHttpClient payPalHttpClient;
 
 	public Map<String, Object> createPaymentDirect(OmsOrder order) {
 			try {
@@ -71,6 +79,39 @@ public class PayPalService {
 				log.error("PayPal 创建支付失败", e);
 			}
 			return null;
+	}
+
+	public Map<String, Object> createPaypalOrder(OmsOrder order) {
+
+		OrdersCreateRequest request = new OrdersCreateRequest();
+		request.prefer("return=representation");
+
+		request.requestBody(new OrderRequest()
+			.checkoutPaymentIntent("CAPTURE")
+			.purchaseUnits(List.of(
+				new PurchaseUnitRequest()
+					.referenceId(order.getOrderSn())
+					.amountWithBreakdown(new AmountWithBreakdown()
+						.currencyCode("USD")
+						.value(order.getPayAmount().toString())
+					)
+			))
+		);
+
+		try {
+			HttpResponse<com.paypal.orders.Order> response = payPalHttpClient.execute(request);
+			com.paypal.orders.Order paypalOrder = response.result();
+
+			Map<String, Object> result = new HashMap<>();
+			result.put("orderId", paypalOrder.id());   // ⭐ 给前端
+			result.put("outTradeNo", order.getOrderSn());
+
+			return result;
+
+		} catch (Exception e) {
+			log.error("创建 PayPal Order 失败", e);
+			return null;
+		}
 	}
 
 	private String extractApprovalUrl(Payment payment) {

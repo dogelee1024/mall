@@ -3,7 +3,9 @@ package com.macro.mall.portal.service.impl;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
 import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.util.StringUtil;
 import com.macro.mall.common.api.CommonPage;
+import com.macro.mall.common.api.dropshipping.InventoryData;
 import com.macro.mall.common.exception.Asserts;
 import com.macro.mall.common.service.RedisService;
 import com.macro.mall.mapper.*;
@@ -12,6 +14,7 @@ import com.macro.mall.portal.dao.PortalOrderDao;
 import com.macro.mall.portal.dao.PortalOrderItemDao;
 import com.macro.mall.portal.dao.SmsCouponHistoryDao;
 import com.macro.mall.portal.domain.*;
+import com.macro.mall.portal.model.DropshippingProductQuantityBO;
 import com.macro.mall.portal.service.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +27,7 @@ import java.math.RoundingMode;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
+import org.springframework.util.StringUtils;
 
 /**
  * 前台订单管理Service
@@ -66,6 +70,8 @@ public class OmsPortalOrderServiceImpl implements OmsPortalOrderService {
     private OmsOrderItemMapper orderItemMapper;
     @Autowired
     private PmsProductMapper productMapper;
+    @Autowired
+    private DropshippingApiService dropshippingApiService;
 
 
     @Override
@@ -99,8 +105,12 @@ public class OmsPortalOrderServiceImpl implements OmsPortalOrderService {
         if(orderParam.getMemberReceiveAddressId()==null){
             Asserts.fail("请选择收货地址！");
         }
+
         //获取购物车及优惠信息
         UmsMember currentMember = memberService.getCurrentMember();
+       /* UmsMember currentMember = new UmsMember();
+        currentMember.setId(13l);
+        currentMember.setUsername("admin");*/
         List<CartPromotionItem> cartPromotionItemList = cartItemService.listPromotion(currentMember.getId(), orderParam.getCartIds());
         for (CartPromotionItem cartPromotionItem : cartPromotionItemList) {
             //生成下单商品信息
@@ -213,6 +223,7 @@ public class OmsPortalOrderServiceImpl implements OmsPortalOrderService {
         order.setReceiverSecondName(orderParam.getReceiverSecondName());
         order.setReceiverPhone(orderParam.getReceiverPhone());
         order.setReceiverPostCode(orderParam.getReceiverPostCode());
+        order.setReceiverCountry(orderParam.getReceiverCountry());
         order.setReceiverProvince(orderParam.getReceiverProvince());
         order.setReceiverCity(orderParam.getReceiverCity());
         order.setReceiverRegion(orderParam.getReceiverRegion());
@@ -237,6 +248,29 @@ public class OmsPortalOrderServiceImpl implements OmsPortalOrderService {
         order.setGrowth(calcGiftGrowth(orderItemList));
         //生成订单号
         order.setOrderSn(generateOrderSn(order));
+
+
+        //create dropshipping order
+        List<DropshippingProductQuantityBO> products = new ArrayList<>();
+        for (CartPromotionItem cartPromotionItem : cartPromotionItemList) {
+            Long productId = cartPromotionItem.getProductId();
+            PmsProduct pmsProduct = productMapper.selectByPrimaryKey(productId);
+            String dropshippingProductId = pmsProduct.getDropshippingProductId();
+            if (StringUtil.isNotEmpty(dropshippingProductId)) {
+                DropshippingProductQuantityBO product = new DropshippingProductQuantityBO();
+                product.setSku(pmsProduct.getDropshippingSku());
+                product.setQuantity(cartPromotionItem.getQuantity());
+                product.setFromCountryCode(pmsProduct.getCountryCode());
+                products.add(product);
+            }
+        }
+        if (!products.isEmpty()) {
+            boolean orderStatus = dropshippingApiService.createOrder(order,  products, orderParam.getReceiverCountryCode());
+            if(!orderStatus){
+                Asserts.fail("create order failed");
+            }
+        }
+
         //设置自动收货天数
         List<OmsOrderSetting> orderSettings = orderSettingMapper.selectByExample(new OmsOrderSettingExample());
         if(CollUtil.isNotEmpty(orderSettings)){
@@ -289,8 +323,9 @@ public class OmsPortalOrderServiceImpl implements OmsPortalOrderService {
         if(updateCount==0){
             Asserts.fail("订单不存在或订单状态不是未支付！");
         }
+
         //恢复所有下单商品的锁定库存，扣减真实库存
-        OmsOrderDetail orderDetail = portalOrderDao.getDetail(orderId);
+       /* OmsOrderDetail orderDetail = portalOrderDao.getDetail(orderId);
         int totalCount = 0;
         for (OmsOrderItem orderItem : orderDetail.getOrderItemList()) {
             int count = portalOrderDao.reduceSkuStock(orderItem.getProductSkuId(),orderItem.getProductQuantity());
@@ -298,8 +333,9 @@ public class OmsPortalOrderServiceImpl implements OmsPortalOrderService {
                 Asserts.fail("库存不足，无法扣减！");
             }
             totalCount+=count;
-        }
-        return totalCount;
+        }*/
+
+        return updateCount;
     }
 
     @Override
@@ -802,14 +838,41 @@ public class OmsPortalOrderServiceImpl implements OmsPortalOrderService {
      */
     private boolean hasStock(List<CartPromotionItem> cartPromotionItemList) {
         for (CartPromotionItem cartPromotionItem : cartPromotionItemList) {
-            if (cartPromotionItem.getRealStock()==null //判断真实库存是否为空
+            Long productId = cartPromotionItem.getProductId();
+            PmsProduct pmsProduct = productMapper.selectByPrimaryKey(productId);
+            String dropshippingProductId = pmsProduct.getDropshippingProductId();
+            if(StringUtil.isNotEmpty(dropshippingProductId)){
+                if(!hasRemoteStock(pmsProduct.getDropshippingSku(), pmsProduct.getCountryCode())){
+                    return false;
+                }
+            }else{
+                if (cartPromotionItem.getRealStock()==null //判断真实库存是否为空
                     ||cartPromotionItem.getRealStock() <= 0 //判断真实库存是否小于0
                     || cartPromotionItem.getRealStock() < cartPromotionItem.getQuantity()) //判断真实库存是否小于下单的数量
-            {
-                return false;
+                {
+                    return false;
+                }
             }
         }
         return true;
+    }
+
+    /**
+     * 判断下单商品是否拥有dropshipping库存
+     * @return
+     */
+    private boolean hasRemoteStock(String remoteProductSku, String countryCode){
+        //https://developers.cjdropshipping.com/api2.0/v1/product/stock/getInventoryByPid?pid=1444929719182168064
+
+        List<InventoryData> productStockBySku = dropshippingApiService.getProductStockBySku(remoteProductSku);
+
+        for (InventoryData inventoryData : productStockBySku) {
+            if (inventoryData.getCountryCode().equals(countryCode) && inventoryData.getTotalInventoryNum() > 0) //判断真实库存是否小于下单的数量
+            {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
